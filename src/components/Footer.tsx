@@ -1,22 +1,135 @@
-import { Heart } from "lucide-react";
+import { Heart, Mail, Phone, MapPin, Facebook, Instagram, Twitter } from "lucide-react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
+const footerLinks = [
+  {
+    title: "Product",
+    links: [
+      { label: "Create Biodata", href: "/create" },
+      { label: "Templates", href: "/#templates" },
+      { label: "Pricing", href: "/#pricing" },
+    ],
+  },
+  {
+    title: "Support",
+    links: [
+      { label: "FAQs", href: "/#faq" },
+      { label: "Contact Us", href: "#" },
+      { label: "Privacy Policy", href: "#" },
+    ],
+  },
+];
+
+const TextHoverEffect = ({ text }: { text: string }) => (
+  <span className="relative inline-block group cursor-default">
+    <span className="transition-transform duration-300 inline-block group-hover:-translate-y-full group-hover:opacity-0">
+      {text}
+    </span>
+    <span className="absolute left-0 top-0 translate-y-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 text-accent">
+      {text}
+    </span>
+  </span>
+);
 
 const Footer = () => {
   return (
-    <footer className="bg-maroon-dark py-12">
-      <div className="container mx-auto px-4 text-center">
-        <div className="flex items-center justify-center gap-2 mb-4">
-          <Heart className="h-5 w-5 text-gold fill-gold" />
-          <span className="font-heading text-lg font-bold text-primary-foreground">
-            ShaadiBio
-          </span>
+    <footer className="relative bg-[hsl(var(--maroon-dark))] overflow-hidden pt-16 pb-8">
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Top Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
+          {/* Brand */}
+          <div className="lg:col-span-1">
+            <div className="flex items-center gap-2 mb-4">
+              <Heart className="h-5 w-5 text-[hsl(var(--gold))] fill-[hsl(var(--gold))]" />
+              <span className="font-heading text-xl font-bold text-primary-foreground">
+                Shaadi<span className="text-[hsl(var(--gold))]">Bio</span>
+              </span>
+            </div>
+            <p className="font-body text-sm text-[hsl(var(--gold-light))]/70 leading-relaxed max-w-xs">
+              Create beautiful marriage biodata with elegant templates trusted by thousands of Indian families.
+            </p>
+          </div>
+
+          {/* Link Columns */}
+          {footerLinks.map((group) => (
+            <div key={group.title}>
+              <h4 className="font-heading text-sm font-bold text-primary-foreground mb-4">
+                {group.title}
+              </h4>
+              <ul className="space-y-3">
+                {group.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      to={link.href}
+                      className="font-body text-sm text-[hsl(var(--gold-light))]/60 hover:text-[hsl(var(--gold))] transition-colors duration-200"
+                    >
+                      <TextHoverEffect text={link.label} />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          {/* Contact */}
+          <div>
+            <h4 className="font-heading text-sm font-bold text-primary-foreground mb-4">
+              Contact Us
+            </h4>
+            <ul className="space-y-3">
+              <li className="flex items-center gap-2 font-body text-sm text-[hsl(var(--gold-light))]/60">
+                <Mail className="h-4 w-4 text-[hsl(var(--gold))]" />
+                hello@shaadibio.com
+              </li>
+              <li className="flex items-center gap-2 font-body text-sm text-[hsl(var(--gold-light))]/60">
+                <Phone className="h-4 w-4 text-[hsl(var(--gold))]" />
+                +91 98765 43210
+              </li>
+              <li className="flex items-center gap-2 font-body text-sm text-[hsl(var(--gold-light))]/60">
+                <MapPin className="h-4 w-4 text-[hsl(var(--gold))]" />
+                Mumbai, India
+              </li>
+            </ul>
+          </div>
         </div>
-        <p className="text-gold-light/70 font-body text-sm">
-          Create beautiful marriage biodata in minutes
-        </p>
-        <div className="ornament-divider max-w-xs mx-auto my-6" />
-        <p className="text-gold-light/50 font-body text-xs">
-          © 2026 ShaadiBio. All rights reserved.
-        </p>
+
+        {/* Divider */}
+        <div className="border-t border-[hsl(var(--gold))]/15 mb-8" />
+
+        {/* Bottom Section */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          {/* Social Icons */}
+          <div className="flex items-center gap-3">
+            {[Facebook, Instagram, Twitter].map((Icon, i) => (
+              <motion.a
+                key={i}
+                href="#"
+                whileHover={{ scale: 1.15, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-9 h-9 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center text-[hsl(var(--gold-light))]/50 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/20 transition-colors"
+              >
+                <Icon className="h-4 w-4" />
+              </motion.a>
+            ))}
+          </div>
+
+          <p className="font-body text-xs text-[hsl(var(--gold-light))]/40">
+            © 2026 ShaadiBio. All rights reserved.
+          </p>
+        </div>
+      </div>
+
+      {/* Large Watermark Text */}
+      <div className="absolute bottom-0 left-0 right-0 pointer-events-none select-none overflow-hidden">
+        <h2
+          className="font-heading text-[8rem] md:text-[14rem] font-bold text-center leading-none text-transparent"
+          style={{
+            WebkitTextStroke: "1px hsla(var(--gold), 0.08)",
+          }}
+        >
+          ShaadiBio
+        </h2>
       </div>
     </footer>
   );
