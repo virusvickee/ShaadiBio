@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
+import ShimmerButton from "@/components/ui/ShimmerButton";
+import FloatingParticles from "@/components/ui/FloatingParticles";
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -28,7 +31,6 @@ const AuthPage = () => {
     e.preventDefault();
     if (!validate()) return;
 
-    // UI-only auth: store in localStorage
     if (isLogin) {
       const users = JSON.parse(localStorage.getItem("shaadibio_users") || "[]");
       const user = users.find((u: any) => u.email === form.email && u.password === form.password);
@@ -53,114 +55,182 @@ const AuthPage = () => {
     navigate("/create");
   };
 
+  const InputField = ({
+    label,
+    icon: Icon,
+    type = "text",
+    placeholder,
+    value,
+    onChange,
+    error,
+    showToggle,
+  }: {
+    label: string;
+    icon: any;
+    type?: string;
+    placeholder: string;
+    value: string;
+    onChange: (v: string) => void;
+    error?: string;
+    showToggle?: boolean;
+  }) => (
+    <motion.div
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="space-y-1.5"
+    >
+      <Label className="font-body text-sm">{label}</Label>
+      <div className="relative">
+        <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          className="pl-10 pr-10 bg-background/50 border-border/60 focus:border-primary/50 transition-colors"
+          type={showToggle ? (showPassword ? "text" : "password") : type}
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+        {showToggle && (
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </button>
+        )}
+      </div>
+      <AnimatePresence>
+        {error && (
+          <motion.p
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="text-destructive text-xs font-body"
+          >
+            {error}
+          </motion.p>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-hero flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-hero flex items-center justify-center px-4 relative overflow-hidden">
+      <FloatingParticles />
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md relative z-10"
+      >
         <Link to="/" className="flex items-center justify-center gap-2 mb-8">
-          <Heart className="h-7 w-7 text-primary fill-primary" />
+          <motion.div
+            animate={{ rotate: [0, 10, -10, 0] }}
+            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+          >
+            <Heart className="h-8 w-8 text-primary fill-primary" />
+          </motion.div>
           <span className="font-heading text-2xl font-bold text-foreground">
             Shaadi<span className="text-gradient-gold">Bio</span>
           </span>
         </Link>
 
-        <div className="bg-card border border-border rounded-xl p-8 shadow-elegant">
-          <h1 className="font-heading text-2xl font-bold text-foreground text-center mb-2">
-            {isLogin ? "Welcome Back" : "Create Account"}
-          </h1>
-          <p className="font-body text-sm text-muted-foreground text-center mb-6">
-            {isLogin ? "Sign in to manage your biodata" : "Sign up to save and download biodata"}
-          </p>
+        <div className="relative">
+          {/* Glow behind card */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-2xl blur-lg" />
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && (
-              <div className="space-y-1.5">
-                <Label className="font-body text-sm">Full Name</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    className="pl-10"
-                    placeholder="Your full name"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  />
-                </div>
-                {errors.name && <p className="text-destructive text-xs font-body">{errors.name}</p>}
-              </div>
-            )}
-
-            <div className="space-y-1.5">
-              <Label className="font-body text-sm">Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  className="pl-10"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                />
-              </div>
-              {errors.email && <p className="text-destructive text-xs font-body">{errors.email}</p>}
-            </div>
-
-            <div className="space-y-1.5">
-              <Label className="font-body text-sm">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  className="pl-10 pr-10"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  value={form.password}
-                  onChange={(e) => setForm({ ...form, password: e.target.value })}
-                />
+          <div className="relative bg-card/90 backdrop-blur-xl border border-border/60 rounded-2xl p-8 shadow-elegant">
+            {/* Tab Switch */}
+            <div className="flex bg-secondary rounded-xl p-1 mb-6">
+              {["Sign In", "Sign Up"].map((tab, i) => (
                 <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  key={tab}
+                  onClick={() => { setIsLogin(i === 0); setErrors({}); }}
+                  className="relative flex-1 py-2.5 text-sm font-body font-medium rounded-lg transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {(i === 0 ? isLogin : !isLogin) && (
+                    <motion.div
+                      layoutId="authTab"
+                      className="absolute inset-0 bg-card rounded-lg shadow-sm"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                  <span className={`relative z-10 ${(i === 0 ? isLogin : !isLogin) ? "text-foreground" : "text-muted-foreground"}`}>
+                    {tab}
+                  </span>
                 </button>
-              </div>
-              {errors.password && <p className="text-destructive text-xs font-body">{errors.password}</p>}
+              ))}
             </div>
 
-            {!isLogin && (
-              <div className="space-y-1.5">
-                <Label className="font-body text-sm">Confirm Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    className="pl-10"
-                    type="password"
-                    placeholder="••••••••"
-                    value={form.confirmPassword}
-                    onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={isLogin ? "login" : "register"}
+                initial={{ opacity: 0, x: isLogin ? -20 : 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: isLogin ? 20 : -20 }}
+                transition={{ duration: 0.2 }}
+              >
+                <h1 className="font-heading text-2xl font-bold text-foreground text-center mb-1">
+                  {isLogin ? "Welcome Back" : "Create Account"}
+                </h1>
+                <p className="font-body text-sm text-muted-foreground text-center mb-6">
+                  {isLogin ? "Sign in to manage your biodata" : "Sign up to save and download biodata"}
+                </p>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {!isLogin && (
+                    <InputField
+                      label="Full Name"
+                      icon={User}
+                      placeholder="Your full name"
+                      value={form.name}
+                      onChange={(v) => setForm({ ...form, name: v })}
+                      error={errors.name}
+                    />
+                  )}
+
+                  <InputField
+                    label="Email"
+                    icon={Mail}
+                    type="email"
+                    placeholder="you@example.com"
+                    value={form.email}
+                    onChange={(v) => setForm({ ...form, email: v })}
+                    error={errors.email}
                   />
-                </div>
-                {errors.confirmPassword && <p className="text-destructive text-xs font-body">{errors.confirmPassword}</p>}
-              </div>
-            )}
 
-            <button
-              type="submit"
-              className="w-full py-3 rounded-lg bg-primary text-primary-foreground font-body font-semibold hover:opacity-90 transition-opacity"
-            >
-              {isLogin ? "Sign In" : "Create Account"}
-            </button>
-          </form>
+                  <InputField
+                    label="Password"
+                    icon={Lock}
+                    placeholder="••••••••"
+                    value={form.password}
+                    onChange={(v) => setForm({ ...form, password: v })}
+                    error={errors.password}
+                    showToggle
+                  />
 
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => { setIsLogin(!isLogin); setErrors({}); }}
-              className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {isLogin ? "Don't have an account? " : "Already have an account? "}
-              <span className="text-primary font-medium">{isLogin ? "Sign Up" : "Sign In"}</span>
-            </button>
+                  {!isLogin && (
+                    <InputField
+                      label="Confirm Password"
+                      icon={Lock}
+                      type="password"
+                      placeholder="••••••••"
+                      value={form.confirmPassword}
+                      onChange={(v) => setForm({ ...form, confirmPassword: v })}
+                      error={errors.confirmPassword}
+                    />
+                  )}
+
+                  <ShimmerButton type="submit" className="w-full py-3 text-base mt-2">
+                    {isLogin ? "Sign In" : "Create Account"}
+                  </ShimmerButton>
+                </form>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
