@@ -14,7 +14,8 @@ import templateTraditional from "@/assets/template-traditional.jpg";
 import templateModern from "@/assets/template-modern.jpg";
 import templateMinimalist from "@/assets/template-minimalist.jpg";
 import testimonialSectionBg from "@/assets/testimonial-section-bg.jpg";
-
+import pricingFree from "@/assets/pricing-free.png";
+import pricingPremium from "@/assets/pricing-premium.png";
 
 
 const features = [
@@ -510,7 +511,7 @@ const Index = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-24 bg-background">
+      <section id="pricing" className="py-24 bg-background">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -530,32 +531,48 @@ const Index = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {/* Free Tier */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="relative rounded-xl border border-border bg-card p-8"
+              whileHover={{ y: -6, transition: { duration: 0.2 } }}
+              className="group relative rounded-2xl border border-border bg-card p-6 flex flex-col overflow-hidden"
             >
-              <h3 className="font-heading text-2xl font-bold text-foreground mb-2">Free</h3>
-              <div className="flex items-baseline gap-1 mb-6">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="font-heading text-xl font-bold text-foreground">Starter</h3>
+                  <p className="font-body text-xs text-muted-foreground mt-1">Perfect to get started</p>
+                </div>
+              </div>
+              <div className="flex items-baseline gap-1 mb-4">
                 <span className="font-heading text-4xl font-bold text-foreground">₹0</span>
                 <span className="font-body text-muted-foreground text-sm">/ forever</span>
               </div>
-              <ul className="space-y-3 mb-8 font-body text-sm text-muted-foreground">
+              <div className="flex justify-center mb-6">
+                <img src={pricingFree} alt="Free tier" className="w-28 h-28 object-contain opacity-80 group-hover:scale-110 transition-transform duration-300" />
+              </div>
+              <p className="font-body text-sm text-muted-foreground mb-6">
+                Create your first biodata with our essential tools and one beautiful template.
+              </p>
+              <ul className="space-y-2.5 mb-8 font-body text-sm text-muted-foreground flex-1">
                 {["1 Biodata Template", "Basic PDF Download", "Real-Time Preview", "Personal Details Form", "Mobile Friendly"].map((item) => (
                   <li key={item} className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-primary flex-shrink-0" />
+                    <Shield className="h-3.5 w-3.5 text-primary flex-shrink-0" />
                     {item}
                   </li>
                 ))}
               </ul>
               <Link to="/create">
-                <ShimmerButton className="w-full py-3 text-sm bg-secondary text-secondary-foreground">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full py-3 rounded-xl border border-border bg-secondary text-foreground font-body font-medium text-sm hover:bg-secondary/80 transition-colors"
+                >
                   Get Started Free
-                </ShimmerButton>
+                </motion.button>
               </Link>
             </motion.div>
 
@@ -565,20 +582,32 @@ const Index = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="relative rounded-xl border-2 border-primary bg-card p-8 shadow-elegant"
+              whileHover={{ y: -6, transition: { duration: 0.2 } }}
+              className="group relative rounded-2xl border-2 border-primary bg-card p-6 flex flex-col overflow-hidden shadow-elegant"
             >
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-body font-semibold">
-                MOST POPULAR
+              <span className="absolute -top-0 right-6 px-3 py-1 rounded-b-lg bg-primary text-primary-foreground text-[10px] font-body font-bold uppercase tracking-wider">
+                Popular
               </span>
-              <h3 className="font-heading text-2xl font-bold text-foreground mb-2">Premium</h3>
-              <div className="flex items-baseline gap-1 mb-6">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="font-heading text-xl font-bold text-foreground">Premium</h3>
+                  <p className="font-body text-xs text-muted-foreground mt-1">Best for serious matches</p>
+                </div>
+              </div>
+              <div className="flex items-baseline gap-1 mb-4">
                 <span className="font-heading text-4xl font-bold text-foreground">₹199</span>
                 <span className="font-body text-muted-foreground text-sm">/ one-time</span>
               </div>
-              <ul className="space-y-3 mb-8 font-body text-sm text-muted-foreground">
+              <div className="flex justify-center mb-6">
+                <img src={pricingPremium} alt="Premium tier" className="w-28 h-28 object-contain group-hover:scale-110 transition-transform duration-300" />
+              </div>
+              <p className="font-body text-sm text-muted-foreground mb-6">
+                Unlock all templates, watermark-free HD exports, and custom styling options.
+              </p>
+              <ul className="space-y-2.5 mb-8 font-body text-sm text-muted-foreground flex-1">
                 {["All 3 Premium Templates", "HD PDF Download", "Watermark-Free Export", "Custom Colors & Fonts", "Priority Support", "Unlimited Edits"].map((item) => (
                   <li key={item} className="flex items-center gap-2">
-                    <Star className="h-4 w-4 text-accent fill-accent flex-shrink-0" />
+                    <Star className="h-3.5 w-3.5 text-accent fill-accent flex-shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -588,6 +617,32 @@ const Index = () => {
                   Upgrade to Premium ✨
                 </ShimmerButton>
               </Link>
+            </motion.div>
+
+            {/* Custom Request Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              whileHover={{ y: -6, transition: { duration: 0.2 } }}
+              className="group relative rounded-2xl border border-border bg-gradient-to-br from-secondary via-card to-secondary/50 p-6 flex flex-col items-center justify-center text-center md:col-span-2 lg:col-span-1"
+            >
+              <Sparkles className="h-10 w-10 text-accent mb-4" />
+              <h3 className="font-heading text-xl font-bold text-foreground mb-2">
+                Need Something Custom?
+              </h3>
+              <p className="font-body text-sm text-muted-foreground mb-8 max-w-xs">
+                Looking for a unique biodata design? Contact us and we'll create something special for your family.
+              </p>
+              <motion.a
+                href="mailto:hello@shaadibio.com"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-8 py-3 rounded-xl border border-border bg-background text-foreground font-body font-medium text-sm hover:bg-secondary transition-colors"
+              >
+                Let's Talk →
+              </motion.a>
             </motion.div>
           </div>
         </div>
