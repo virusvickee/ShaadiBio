@@ -6,13 +6,15 @@ import ContactHoroscopeForm from "@/components/biodata/ContactHoroscopeForm";
 import BiodataPreview from "@/components/biodata/BiodataPreview";
 import ModernTemplate from "@/components/biodata/ModernTemplate";
 import MinimalistTemplate from "@/components/biodata/MinimalistTemplate";
+import PhotoCropDialog from "@/components/biodata/PhotoCropDialog";
 import Navbar from "@/components/Navbar";
 import StepIndicator from "@/components/ui/StepIndicator";
-import { ArrowLeft, ArrowRight, Eye, EyeOff, Download, Palette, LayoutTemplate, Save } from "lucide-react";
+import { ArrowLeft, ArrowRight, Eye, EyeOff, Download, Palette, LayoutTemplate, Save, Type, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { Language, languageNames } from "@/lib/i18n";
 
 const steps = ["Personal", "Family & Education", "Contact & Horoscope"];
 
@@ -25,6 +27,15 @@ const accentColors = [
   { name: "Navy", value: "#1e3a5f" },
 ];
 
+const fontOptions = [
+  { name: "Classic", heading: "'Playfair Display', serif", body: "'Outfit', sans-serif" },
+  { name: "Elegant", heading: "'Georgia', serif", body: "'Verdana', sans-serif" },
+  { name: "Sans", heading: "'Arial', sans-serif", body: "'Arial', sans-serif" },
+  { name: "Serif", heading: "'Times New Roman', serif", body: "'Times New Roman', serif" },
+];
+
+const languages: Language[] = ["en", "hi", "mr"];
+
 const CreateBiodata = () => {
   const [formData, setFormData] = useState<BiodataFormData>(() => {
     const saved = localStorage.getItem("shaadibio_draft");
@@ -34,7 +45,10 @@ const CreateBiodata = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [template, setTemplate] = useState<"traditional" | "modern" | "minimalist">("traditional");
   const [accentColor, setAccentColor] = useState("#b91c4a");
+  const [selectedFont, setSelectedFont] = useState(0);
+  const [language, setLanguage] = useState<Language>("en");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);
 
   const handleChange = (field: keyof BiodataFormData, value: string | boolean) => {
@@ -49,9 +63,14 @@ const CreateBiodata = () => {
         return;
       }
       const reader = new FileReader();
-      reader.onloadend = () => handleChange("photoUrl", reader.result as string);
+      reader.onloadend = () => setCropImageSrc(reader.result as string);
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleCropDone = (croppedDataUrl: string) => {
+    handleChange("photoUrl", croppedDataUrl);
+    setCropImageSrc(null);
   };
 
   const handleSaveDraft = () => {
@@ -81,6 +100,8 @@ const CreateBiodata = () => {
       setIsGeneratingPdf(false);
     }
   };
+
+  const currentFont = fontOptions[selectedFont];
 
   return (
     <div className="min-h-screen bg-background">
@@ -121,10 +142,7 @@ const CreateBiodata = () => {
                 {formData.photoUrl && (
                   <div className="mt-3 flex items-center gap-3">
                     <img src={formData.photoUrl} alt="Preview" className="w-16 h-16 rounded-lg object-cover border border-border" />
-                    <button
-                      onClick={() => handleChange("photoUrl", "")}
-                      className="text-xs font-body text-destructive hover:underline"
-                    >
+                    <button onClick={() => handleChange("photoUrl", "")} className="text-xs font-body text-destructive hover:underline">
                       Remove
                     </button>
                   </div>
@@ -173,24 +191,15 @@ const CreateBiodata = () => {
             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
               <div className="flex items-center gap-2">
                 <LayoutTemplate className="h-4 w-4 text-muted-foreground" />
-                <button
-                  onClick={() => setTemplate("traditional")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-body transition-colors ${template === "traditional" ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}
-                >
-                  Traditional
-                </button>
-                <button
-                  onClick={() => setTemplate("modern")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-body transition-colors ${template === "modern" ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}
-                >
-                  Modern
-                </button>
-                <button
-                  onClick={() => setTemplate("minimalist")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-body transition-colors ${template === "minimalist" ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}
-                >
-                  Minimalist
-                </button>
+                {(["traditional", "modern", "minimalist"] as const).map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setTemplate(t)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-body transition-colors ${template === t ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}
+                  >
+                    {t.charAt(0).toUpperCase() + t.slice(1)}
+                  </button>
+                ))}
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -211,7 +220,7 @@ const CreateBiodata = () => {
 
             {/* Color Picker */}
             {(template === "modern" || template === "minimalist") && (
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-3">
                 <Palette className="h-4 w-4 text-muted-foreground" />
                 <span className="text-xs font-body text-muted-foreground">Accent:</span>
                 {accentColors.map((c) => (
@@ -226,19 +235,70 @@ const CreateBiodata = () => {
               </div>
             )}
 
+            {/* Font Picker */}
+            <div className="flex items-center gap-2 mb-3">
+              <Type className="h-4 w-4 text-muted-foreground" />
+              <span className="text-xs font-body text-muted-foreground">Font:</span>
+              {fontOptions.map((f, i) => (
+                <button
+                  key={f.name}
+                  onClick={() => setSelectedFont(i)}
+                  className={`px-2.5 py-1 rounded-lg text-xs transition-colors ${selectedFont === i ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}
+                  style={{ fontFamily: f.heading }}
+                >
+                  {f.name}
+                </button>
+              ))}
+            </div>
+
+            {/* Language Picker */}
+            <div className="flex items-center gap-2 mb-4">
+              <Globe className="h-4 w-4 text-muted-foreground" />
+              <span className="text-xs font-body text-muted-foreground">Language:</span>
+              {languages.map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => setLanguage(lang)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-body transition-colors ${language === lang ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}
+                >
+                  {languageNames[lang]}
+                </button>
+              ))}
+            </div>
+
             {/* Preview */}
-            <div ref={previewRef}>
-              {template === "traditional" ? (
-                <BiodataPreview data={formData} />
-              ) : template === "modern" ? (
-                <ModernTemplate data={formData} accentColor={accentColor} />
-              ) : (
-                <MinimalistTemplate data={formData} accentColor={accentColor} />
-              )}
+            <div ref={previewRef} style={{ fontFamily: currentFont.body }}>
+              <style>{`
+                [data-biodata-preview] h1, [data-biodata-preview] h2, [data-biodata-preview] h3, [data-biodata-preview] h4 {
+                  font-family: ${currentFont.heading} !important;
+                }
+                [data-biodata-preview] span, [data-biodata-preview] p, [data-biodata-preview] div {
+                  font-family: ${currentFont.body} !important;
+                }
+              `}</style>
+              <div data-biodata-preview>
+                {template === "traditional" ? (
+                  <BiodataPreview data={formData} showWatermark={true} language={language} />
+                ) : template === "modern" ? (
+                  <ModernTemplate data={formData} accentColor={accentColor} showWatermark={true} language={language} />
+                ) : (
+                  <MinimalistTemplate data={formData} accentColor={accentColor} showWatermark={true} language={language} />
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Photo Crop Dialog */}
+      {cropImageSrc && (
+        <PhotoCropDialog
+          open={!!cropImageSrc}
+          imageSrc={cropImageSrc}
+          onClose={() => setCropImageSrc(null)}
+          onCropDone={handleCropDone}
+        />
+      )}
     </div>
   );
 };

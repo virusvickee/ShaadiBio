@@ -2,6 +2,7 @@ import { BiodataFormData } from "@/types/biodata";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface FamilyEducationFormProps {
   data: BiodataFormData;
@@ -65,6 +66,28 @@ const FamilyEducationForm = ({ data, onChange }: FamilyEducationFormProps) => {
           <div className="space-y-1.5">
             <Label className="font-body text-sm">Native Place</Label>
             <Input placeholder="Native place" value={data.nativePlace} onChange={(e) => onChange("nativePlace", e.target.value)} />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="font-body text-sm">Family Type</Label>
+            <Select value={data.familyType} onValueChange={(v) => onChange("familyType", v)}>
+              <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Joint">Joint</SelectItem>
+                <SelectItem value="Nuclear">Nuclear</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label className="font-body text-sm">Family Status</Label>
+            <Select value={data.familyStatus} onValueChange={(v) => onChange("familyStatus", v)}>
+              <SelectTrigger><SelectValue placeholder="Select status" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Middle Class">Middle Class</SelectItem>
+                <SelectItem value="Upper Middle Class">Upper Middle Class</SelectItem>
+                <SelectItem value="Rich">Rich</SelectItem>
+                <SelectItem value="Affluent">Affluent</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>

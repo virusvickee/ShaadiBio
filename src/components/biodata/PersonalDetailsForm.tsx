@@ -70,6 +70,11 @@ const PersonalDetailsForm = ({ data, onChange }: PersonalDetailsFormProps) => {
             </SelectContent>
           </Select>
         </div>
+
+        <div className="space-y-1.5">
+          <Label className="font-body text-sm">Nationality</Label>
+          <Input placeholder="e.g. Indian" value={data.nationality} onChange={(e) => onChange("nationality", e.target.value)} />
+        </div>
       </div>
     </div>
   );
