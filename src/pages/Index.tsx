@@ -13,6 +13,7 @@ import BookTestimonial from "@/components/ui/BookTestimonial";
 import templateTraditional from "@/assets/template-traditional.jpg";
 import templateModern from "@/assets/template-modern.jpg";
 import templateMinimalist from "@/assets/template-minimalist.jpg";
+import testimonialSectionBg from "@/assets/testimonial-section-bg.jpg";
 
 
 const features = [
@@ -376,8 +377,13 @@ const Index = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-4">
+      <section className="py-24 relative overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-15"
+          style={{ backgroundImage: `url(${testimonialSectionBg})` }}
+        />
+        <div className="absolute inset-0 bg-background/85" />
+        <div className="relative container mx-auto px-4">
           <div className="flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-16">
             {/* Left Content (appears below book on mobile) */}
             <motion.div
