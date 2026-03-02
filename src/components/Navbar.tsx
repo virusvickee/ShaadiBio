@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, LogOut, User, Menu, X, Moon, Sun } from "lucide-react";
+import { Heart, LogOut, User, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -7,7 +7,7 @@ const Navbar = () => {
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => document.documentElement.classList.contains("dark"));
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,20 +25,6 @@ const Navbar = () => {
     navigate("/");
   };
 
-  const toggleDarkMode = () => {
-    const next = !darkMode;
-    setDarkMode(next);
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("shaadibio_theme", next ? "dark" : "light");
-  };
-
-  useEffect(() => {
-    const saved = localStorage.getItem("shaadibio_theme");
-    if (saved === "dark") {
-      setDarkMode(true);
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
 
   return (
     <motion.nav
@@ -63,14 +49,6 @@ const Navbar = () => {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-3">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={toggleDarkMode}
-            className="p-2 rounded-lg bg-secondary text-muted-foreground hover:text-foreground transition-colors"
-            title={darkMode ? "Light mode" : "Dark mode"}
-          >
-            {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </motion.button>
           {user ? (
             <>
               <span className="flex items-center gap-1.5 text-sm font-body text-muted-foreground px-3 py-1.5 rounded-lg bg-secondary/50">
@@ -132,13 +110,6 @@ const Navbar = () => {
             className="md:hidden bg-card border-t border-border overflow-hidden"
           >
             <div className="p-4 space-y-3">
-              <button
-                onClick={toggleDarkMode}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-secondary text-foreground font-body text-sm"
-              >
-                {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                {darkMode ? "Light Mode" : "Dark Mode"}
-              </button>
               {user ? (
                 <>
                   <div className="flex items-center gap-2 text-sm font-body text-muted-foreground pb-3 border-b border-border">
