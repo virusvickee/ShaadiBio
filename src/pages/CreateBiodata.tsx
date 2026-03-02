@@ -5,6 +5,7 @@ import FamilyEducationForm from "@/components/biodata/FamilyEducationForm";
 import ContactHoroscopeForm from "@/components/biodata/ContactHoroscopeForm";
 import BiodataPreview from "@/components/biodata/BiodataPreview";
 import ModernTemplate from "@/components/biodata/ModernTemplate";
+import MinimalistTemplate from "@/components/biodata/MinimalistTemplate";
 import Navbar from "@/components/Navbar";
 import StepIndicator from "@/components/ui/StepIndicator";
 import { ArrowLeft, ArrowRight, Eye, EyeOff, Download, Palette, LayoutTemplate, Save } from "lucide-react";
@@ -31,7 +32,7 @@ const CreateBiodata = () => {
   });
   const [currentStep, setCurrentStep] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
-  const [template, setTemplate] = useState<"traditional" | "modern">("traditional");
+  const [template, setTemplate] = useState<"traditional" | "modern" | "minimalist">("traditional");
   const [accentColor, setAccentColor] = useState("#b91c4a");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -184,6 +185,12 @@ const CreateBiodata = () => {
                 >
                   Modern
                 </button>
+                <button
+                  onClick={() => setTemplate("minimalist")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-body transition-colors ${template === "minimalist" ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}
+                >
+                  Minimalist
+                </button>
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -203,7 +210,7 @@ const CreateBiodata = () => {
             </div>
 
             {/* Color Picker */}
-            {template === "modern" && (
+            {(template === "modern" || template === "minimalist") && (
               <div className="flex items-center gap-2 mb-4">
                 <Palette className="h-4 w-4 text-muted-foreground" />
                 <span className="text-xs font-body text-muted-foreground">Accent:</span>
@@ -223,8 +230,10 @@ const CreateBiodata = () => {
             <div ref={previewRef}>
               {template === "traditional" ? (
                 <BiodataPreview data={formData} />
-              ) : (
+              ) : template === "modern" ? (
                 <ModernTemplate data={formData} accentColor={accentColor} />
+              ) : (
+                <MinimalistTemplate data={formData} accentColor={accentColor} />
               )}
             </div>
           </div>
