@@ -14,6 +14,7 @@ import templateTraditional from "@/assets/template-traditional.jpg";
 import templateModern from "@/assets/template-modern.jpg";
 import templateMinimalist from "@/assets/template-minimalist.jpg";
 import testimonialSectionBg from "@/assets/testimonial-section-bg.jpg";
+import indianFamily from "@/assets/indian-family.jpg";
 
 
 const features = [
@@ -500,10 +501,31 @@ const Index = () => {
             <div className="ornament-divider max-w-xs mx-auto mb-4" />
           </motion.div>
 
-          <div className="max-w-2xl mx-auto space-y-3">
-            {faqs.map((faq) => (
-              <FaqItem key={faq.q} q={faq.q} a={faq.a} />
-            ))}
+          <div className="max-w-5xl mx-auto flex flex-col lg:flex-row gap-10 items-start">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="w-full lg:w-2/5 flex-shrink-0"
+            >
+              <div className="rounded-2xl overflow-hidden shadow-lg border border-border">
+                <img
+                  src={indianFamily}
+                  alt="Happy Indian family celebrating together"
+                  className="w-full h-auto object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <p className="text-center text-sm text-muted-foreground font-body mt-3">
+                Trusted by thousands of Indian families
+              </p>
+            </motion.div>
+
+            <div className="w-full lg:w-3/5 space-y-3">
+              {faqs.map((faq) => (
+                <FaqItem key={faq.q} q={faq.q} a={faq.a} />
+              ))}
+            </div>
           </div>
         </div>
       </section>
