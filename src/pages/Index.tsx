@@ -172,7 +172,7 @@ const Index = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-heading text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight"
+            className="font-heading text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
           >
             Beautiful Biodata,{" "}
             <br className="hidden md:block" />
