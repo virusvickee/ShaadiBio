@@ -2,12 +2,12 @@ import React, { useRef, useCallback, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import shaadiCover from "@/assets/shaadi-cover.jpg";
-import testimonialBg1 from "@/assets/testimonial-bg-1.jpg";
-import testimonialBg2 from "@/assets/testimonial-bg-2.jpg";
-import testimonialBg3 from "@/assets/testimonial-bg-3.jpg";
-import testimonialBg4 from "@/assets/testimonial-bg-4.jpg";
+import bookPage1 from "@/assets/book-page-1.jpg";
+import bookPage2 from "@/assets/book-page-2.jpg";
+import bookPage3 from "@/assets/book-page-3.jpg";
+import bookPage4 from "@/assets/book-page-4.jpg";
 
-const pageBgs = [testimonialBg1, testimonialBg2, testimonialBg3, testimonialBg4];
+const pageBgs = [bookPage1, bookPage2, bookPage3, bookPage4];
 
 interface Testimonial {
   name: string;
@@ -100,9 +100,10 @@ const BookTestimonial = ({ testimonials }: BookTestimonialProps) => {
               <div className="h-full relative overflow-hidden">
                 <img
                   src={pageBgs[i % pageBgs.length]}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover opacity-20"
+                  alt="Indian family"
+                  className="absolute inset-0 w-full h-full object-cover opacity-30"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/70 to-background/40" />
                 <div className="relative h-full flex flex-col justify-between p-8">
                   {/* Page number */}
                   <div className="flex items-center justify-between mb-4">
