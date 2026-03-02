@@ -9,6 +9,7 @@ import AnimatedText from "@/components/ui/AnimatedText";
 import GlowCard from "@/components/ui/GlowCard";
 import ShimmerButton from "@/components/ui/ShimmerButton";
 import FloatingParticles from "@/components/ui/FloatingParticles";
+import BookTestimonial from "@/components/ui/BookTestimonial";
 import templateTraditional from "@/assets/template-traditional.jpg";
 import templateModern from "@/assets/template-modern.jpg";
 import templateMinimalist from "@/assets/template-minimalist.jpg";
@@ -395,29 +396,7 @@ const Index = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {testimonials.map((t, i) => (
-              <GlowCard key={t.name} delay={i * 0.1}>
-                <div className="p-6">
-                  <Quote className="h-8 w-8 text-accent/30 mb-4" />
-                  <p className="font-body text-sm text-foreground leading-relaxed mb-4">
-                    "{t.text}"
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-heading text-sm font-semibold text-foreground">{t.name}</div>
-                      <div className="font-body text-xs text-muted-foreground">{t.location}</div>
-                    </div>
-                    <div className="flex gap-0.5">
-                      {Array.from({ length: t.rating }).map((_, j) => (
-                        <Star key={j} className="h-3.5 w-3.5 text-accent fill-accent" />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </GlowCard>
-            ))}
-          </div>
+          <BookTestimonial testimonials={testimonials} />
         </div>
       </section>
 
