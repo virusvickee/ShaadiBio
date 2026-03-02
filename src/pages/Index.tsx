@@ -384,38 +384,79 @@ const Index = () => {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="flex-1 text-center lg:text-left"
+              className="flex-1 text-center lg:text-left space-y-6"
             >
-              <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-body font-semibold mb-4">
+              <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-body font-semibold">
                 TESTIMONIALS
               </span>
-              <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-4">
+              <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground">
                 Loved by Families
               </h2>
-              <div className="ornament-divider max-w-xs mx-auto lg:mx-0 mb-6" />
-              <p className="font-body text-muted-foreground max-w-md mx-auto lg:mx-0 mb-6 leading-relaxed">
+              <div className="ornament-divider max-w-xs mx-auto lg:mx-0" />
+              <p className="font-body text-muted-foreground max-w-md mx-auto lg:mx-0 leading-relaxed">
                 See what our users say about their ShaadiBio experience. Thousands of families across India trust us to create their perfect marriage biodata.
               </p>
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-3 justify-center lg:justify-start">
-                  <div className="flex -space-x-2">
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/60 to-accent/60 border-2 border-background flex items-center justify-center text-[10px] font-bold text-primary-foreground">
-                        {["P", "R", "A", "S"][i]}
-                      </div>
-                    ))}
+
+              {/* Key highlights */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto lg:mx-0">
+                <div className="flex items-start gap-3 text-left">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <Heart className="h-4 w-4 text-primary" />
                   </div>
-                  <div className="text-left">
-                    <div className="flex gap-0.5">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-3.5 w-3.5 text-accent fill-accent" />
-                      ))}
-                    </div>
-                    <span className="font-body text-xs text-muted-foreground">4.9/5 from 10,000+ users</span>
+                  <div>
+                    <div className="font-heading text-sm font-semibold text-foreground">500+ Matches</div>
+                    <div className="font-body text-xs text-muted-foreground">Successful connections made</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 text-left">
+                  <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <Users className="h-4 w-4 text-accent" />
+                  </div>
+                  <div>
+                    <div className="font-heading text-sm font-semibold text-foreground">10,000+ Users</div>
+                    <div className="font-body text-xs text-muted-foreground">Families across India</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 text-left">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <Shield className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <div className="font-heading text-sm font-semibold text-foreground">100% Private</div>
+                    <div className="font-body text-xs text-muted-foreground">Your data stays secure</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 text-left">
+                  <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <Download className="h-4 w-4 text-accent" />
+                  </div>
+                  <div>
+                    <div className="font-heading text-sm font-semibold text-foreground">Free PDFs</div>
+                    <div className="font-body text-xs text-muted-foreground">Download anytime, no cost</div>
                   </div>
                 </div>
               </div>
-              <Link to="/create" className="inline-block mt-8">
+
+              {/* User avatars and rating */}
+              <div className="flex items-center gap-3 justify-center lg:justify-start">
+                <div className="flex -space-x-2">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/60 to-accent/60 border-2 border-background flex items-center justify-center text-[10px] font-bold text-primary-foreground">
+                      {["P", "R", "A", "S"][i]}
+                    </div>
+                  ))}
+                </div>
+                <div className="text-left">
+                  <div className="flex gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-3.5 w-3.5 text-accent fill-accent" />
+                    ))}
+                  </div>
+                  <span className="font-body text-xs text-muted-foreground">4.9/5 from 10,000+ users</span>
+                </div>
+              </div>
+
+              <Link to="/create" className="inline-block">
                 <ShimmerButton className="px-6 py-3 text-sm">
                   Create Your Biodata →
                 </ShimmerButton>
