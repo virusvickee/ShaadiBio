@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { FileText, Palette, Download, Eye, Star, Users, Shield } from "lucide-react";
-import { motion } from "framer-motion";
+import { FileText, Palette, Download, Eye, Star, Users, Shield, Heart, Quote, ChevronDown, Sparkles, Globe, Lock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import heroBg from "@/assets/hero-bg.jpg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -37,6 +38,111 @@ const stats = [
   { icon: Star, value: "4.9/5", label: "User Rating" },
   { icon: Shield, value: "100%", label: "Privacy Secured" },
 ];
+
+const testimonials = [
+  {
+    name: "Priya Sharma",
+    location: "Mumbai",
+    text: "ShaadiBio made creating our family biodata so easy! The templates are beautiful and the PDF looked very professional. We received compliments from everyone.",
+    rating: 5,
+  },
+  {
+    name: "Rajesh Patel",
+    location: "Ahmedabad",
+    text: "I was struggling with Word documents for days. ShaadiBio let me create a stunning biodata in just 10 minutes. The real-time preview feature is amazing!",
+    rating: 5,
+  },
+  {
+    name: "Anita Desai",
+    location: "Delhi",
+    text: "The modern template with customizable colors is exactly what I wanted. It looks elegant and unique. Highly recommend to all families looking for a match.",
+    rating: 5,
+  },
+  {
+    name: "Suresh Kumar",
+    location: "Bangalore",
+    text: "Privacy controls are a great touch — we could hide income and contact details as needed. Very thoughtful design. The PDF quality is excellent for printing.",
+    rating: 4,
+  },
+];
+
+const templates = [
+  {
+    name: "Traditional",
+    description: "Classic Indian biodata with ornamental dividers, Ganesh invocation, and warm gold accents. Perfect for traditional families.",
+    color: "from-primary/20 to-accent/10",
+  },
+  {
+    name: "Modern",
+    description: "Clean, card-based layout with customizable accent colors, grid information display, and a contemporary professional look.",
+    color: "from-accent/20 to-primary/10",
+  },
+];
+
+const highlights = [
+  { icon: Sparkles, title: "AI-Ready Templates", description: "Beautifully designed templates that adapt to your content automatically." },
+  { icon: Globe, title: "Multi-Language", description: "Support for English, Hindi, and regional language content in your biodata." },
+  { icon: Lock, title: "Privacy First", description: "Control exactly what information is visible. Hide income, contact, or any section." },
+  { icon: Heart, title: "Made with Love", description: "Crafted specifically for Indian families with cultural details like horoscope & gotra." },
+];
+
+const faqs = [
+  {
+    q: "Is ShaadiBio free to use?",
+    a: "Yes! You can create, customize, and preview your biodata completely free. PDF downloads are also free with a small watermark. Premium users get watermark-free downloads.",
+  },
+  {
+    q: "What details can I include in my biodata?",
+    a: "You can include personal details (name, DOB, height, religion, caste), education & career, family information (parents, siblings), horoscope details (rashi, nakshatra, gotra), contact information, and a profile photo.",
+  },
+  {
+    q: "Can I hide certain information?",
+    a: "Absolutely! ShaadiBio includes privacy controls that let you hide sensitive information like income and contact details from the biodata while still keeping it in your saved draft.",
+  },
+  {
+    q: "How many templates are available?",
+    a: "Currently we offer two beautiful templates — Traditional and Modern — each with multiple color customization options. More templates are being added regularly.",
+  },
+  {
+    q: "Can I edit my biodata after saving?",
+    a: "Yes! Your biodata draft is automatically saved. You can come back anytime to edit, change templates, customize colors, and re-download the updated PDF.",
+  },
+];
+
+const FaqItem = ({ q, a }: { q: string; a: string }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="border border-border rounded-xl overflow-hidden"
+    >
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/30 transition-colors"
+      >
+        <span className="font-heading text-base font-semibold text-foreground pr-4">{q}</span>
+        <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
+          <ChevronDown className="h-5 w-5 text-muted-foreground shrink-0" />
+        </motion.div>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <p className="px-5 pb-5 font-body text-sm text-muted-foreground leading-relaxed">{a}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
 
 const Index = () => {
   return (
@@ -75,9 +181,7 @@ const Index = () => {
           >
             Beautiful Biodata,{" "}
             <br className="hidden md:block" />
-            <AnimatedText
-              words={["Made Simple", "Made Elegant", "Made Yours"]}
-            />
+            <AnimatedText words={["Made Simple", "Made Elegant", "Made Yours"]} />
           </motion.h1>
 
           <motion.p
@@ -173,6 +277,163 @@ const Index = () => {
                   </p>
                 </div>
               </GlowCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Template Showcase */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-body font-semibold mb-4">
+              TEMPLATES
+            </span>
+            <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-4">
+              Choose Your Style
+            </h2>
+            <div className="ornament-divider max-w-xs mx-auto mb-4" />
+            <p className="font-body text-muted-foreground max-w-lg mx-auto">
+              Two stunning templates designed for Indian families, with more coming soon
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {templates.map((tmpl, i) => (
+              <GlowCard key={tmpl.name} delay={i * 0.15}>
+                <div className="p-8">
+                  <div className={`w-full h-48 rounded-xl bg-gradient-to-br ${tmpl.color} flex items-center justify-center mb-6 border border-border/50`}>
+                    <div className="text-center">
+                      <div className="w-16 h-16 rounded-2xl bg-card/80 backdrop-blur-sm border border-border mx-auto flex items-center justify-center mb-3">
+                        <Palette className="h-8 w-8 text-primary" />
+                      </div>
+                      <span className="font-heading text-sm font-semibold text-foreground">{tmpl.name} Template</span>
+                    </div>
+                  </div>
+                  <h3 className="font-heading text-xl font-bold text-foreground mb-2">{tmpl.name}</h3>
+                  <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">{tmpl.description}</p>
+                  <Link to="/create" className="inline-flex items-center gap-1.5 text-sm font-body font-medium text-primary hover:underline">
+                    Try this template →
+                  </Link>
+                </div>
+              </GlowCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Highlights / Why ShaadiBio */}
+      <section className="py-24 bg-secondary/20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-body font-semibold mb-4">
+              WHY SHAADIBIO
+            </span>
+            <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-4">
+              Built for Indian Families
+            </h2>
+            <div className="ornament-divider max-w-xs mx-auto mb-4" />
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            {highlights.map((h, i) => (
+              <motion.div
+                key={h.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="text-center p-6"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center mx-auto mb-4 border border-border/50">
+                  <h.icon className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="font-heading text-base font-semibold text-foreground mb-2">{h.title}</h3>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed">{h.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-body font-semibold mb-4">
+              TESTIMONIALS
+            </span>
+            <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-4">
+              Loved by Families
+            </h2>
+            <div className="ornament-divider max-w-xs mx-auto mb-4" />
+            <p className="font-body text-muted-foreground max-w-lg mx-auto">
+              See what our users say about their ShaadiBio experience
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {testimonials.map((t, i) => (
+              <GlowCard key={t.name} delay={i * 0.1}>
+                <div className="p-6">
+                  <Quote className="h-8 w-8 text-accent/30 mb-4" />
+                  <p className="font-body text-sm text-foreground leading-relaxed mb-4">
+                    "{t.text}"
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-heading text-sm font-semibold text-foreground">{t.name}</div>
+                      <div className="font-body text-xs text-muted-foreground">{t.location}</div>
+                    </div>
+                    <div className="flex gap-0.5">
+                      {Array.from({ length: t.rating }).map((_, j) => (
+                        <Star key={j} className="h-3.5 w-3.5 text-accent fill-accent" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </GlowCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-24 bg-secondary/20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-body font-semibold mb-4">
+              FAQ
+            </span>
+            <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-4">
+              Common Questions
+            </h2>
+            <div className="ornament-divider max-w-xs mx-auto mb-4" />
+          </motion.div>
+
+          <div className="max-w-2xl mx-auto space-y-3">
+            {faqs.map((faq) => (
+              <FaqItem key={faq.q} q={faq.q} a={faq.a} />
             ))}
           </div>
         </div>
