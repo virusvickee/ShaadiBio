@@ -150,8 +150,9 @@ const Index = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroBg})` }}
         />
+        <div className="absolute inset-0 bg-black/50" />
         <FloatingParticles />
-        <div className="relative z-10 container mx-auto px-4 text-center">
+        <div className="relative z-10 container mx-auto px-4 text-center [&_*]:!text-white [&_.text-gradient-gold]:!text-amber-300 [&_.text-muted-foreground]:!text-white/80">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
