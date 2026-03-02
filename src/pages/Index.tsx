@@ -378,25 +378,60 @@ const Index = () => {
       {/* Testimonials */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-body font-semibold mb-4">
-              TESTIMONIALS
-            </span>
-            <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-4">
-              Loved by Families
-            </h2>
-            <div className="ornament-divider max-w-xs mx-auto mb-4" />
-            <p className="font-body text-muted-foreground max-w-lg mx-auto">
-              See what our users say about their ShaadiBio experience
-            </p>
-          </motion.div>
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+            {/* Left Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex-1 text-center lg:text-left"
+            >
+              <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-body font-semibold mb-4">
+                TESTIMONIALS
+              </span>
+              <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-4">
+                Loved by Families
+              </h2>
+              <div className="ornament-divider max-w-xs mx-auto lg:mx-0 mb-6" />
+              <p className="font-body text-muted-foreground max-w-md mx-auto lg:mx-0 mb-6 leading-relaxed">
+                See what our users say about their ShaadiBio experience. Thousands of families across India trust us to create their perfect marriage biodata.
+              </p>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3 justify-center lg:justify-start">
+                  <div className="flex -space-x-2">
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/60 to-accent/60 border-2 border-background flex items-center justify-center text-[10px] font-bold text-primary-foreground">
+                        {["P", "R", "A", "S"][i]}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-left">
+                    <div className="flex gap-0.5">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-3.5 w-3.5 text-accent fill-accent" />
+                      ))}
+                    </div>
+                    <span className="font-body text-xs text-muted-foreground">4.9/5 from 10,000+ users</span>
+                  </div>
+                </div>
+              </div>
+              <Link to="/create" className="inline-block mt-8">
+                <ShimmerButton className="px-6 py-3 text-sm">
+                  Create Your Biodata →
+                </ShimmerButton>
+              </Link>
+            </motion.div>
 
-          <BookTestimonial testimonials={testimonials} />
+            {/* Right Book */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex-shrink-0"
+            >
+              <BookTestimonial testimonials={testimonials} />
+            </motion.div>
+          </div>
         </div>
       </section>
 
