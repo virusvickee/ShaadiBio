@@ -2,6 +2,12 @@ import React, { useRef, useCallback, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import shaadiCover from "@/assets/shaadi-cover.jpg";
+import testimonialBg1 from "@/assets/testimonial-bg-1.jpg";
+import testimonialBg2 from "@/assets/testimonial-bg-2.jpg";
+import testimonialBg3 from "@/assets/testimonial-bg-3.jpg";
+import testimonialBg4 from "@/assets/testimonial-bg-4.jpg";
+
+const pageBgs = [testimonialBg1, testimonialBg2, testimonialBg3, testimonialBg4];
 
 interface Testimonial {
   name: string;
@@ -91,33 +97,40 @@ const BookTestimonial = ({ testimonials }: BookTestimonialProps) => {
           {/* Testimonial Pages */}
           {testimonials.map((t, i) => (
             <Page key={i}>
-              <div className="h-full flex flex-col justify-between p-8 bg-card">
-                {/* Page number */}
-                <div className="flex items-center justify-between mb-4">
-                  <Quote className="h-8 w-8 text-primary/20" />
-                  <span className="font-body text-xs text-muted-foreground">
-                    {i + 1} / {testimonials.length}
-                  </span>
-                </div>
+              <div className="h-full relative overflow-hidden">
+                <img
+                  src={pageBgs[i % pageBgs.length]}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover opacity-20"
+                />
+                <div className="relative h-full flex flex-col justify-between p-8">
+                  {/* Page number */}
+                  <div className="flex items-center justify-between mb-4">
+                    <Quote className="h-8 w-8 text-primary/30" />
+                    <span className="font-body text-xs text-muted-foreground">
+                      {i + 1} / {testimonials.length}
+                    </span>
+                  </div>
 
-                {/* Quote */}
-                <div className="flex-1 flex items-center">
-                  <p className="font-body text-base text-foreground leading-relaxed italic">
-                    "{t.text}"
-                  </p>
-                </div>
+                  {/* Quote */}
+                  <div className="flex-1 flex items-center">
+                    <p className="font-body text-base text-foreground leading-relaxed italic">
+                      "{t.text}"
+                    </p>
+                  </div>
 
-                {/* Author */}
-                <div className="pt-6 border-t border-border/50">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-heading text-sm font-bold text-foreground">{t.name}</div>
-                      <div className="font-body text-xs text-muted-foreground">{t.location}</div>
-                    </div>
-                    <div className="flex gap-0.5">
-                      {Array.from({ length: t.rating }).map((_, j) => (
-                        <Star key={j} className="h-3.5 w-3.5 text-accent fill-accent" />
-                      ))}
+                  {/* Author */}
+                  <div className="pt-6 border-t border-border/50">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-heading text-sm font-bold text-foreground">{t.name}</div>
+                        <div className="font-body text-xs text-muted-foreground">{t.location}</div>
+                      </div>
+                      <div className="flex gap-0.5">
+                        {Array.from({ length: t.rating }).map((_, j) => (
+                          <Star key={j} className="h-3.5 w-3.5 text-accent fill-accent" />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
