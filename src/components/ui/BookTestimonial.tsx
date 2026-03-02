@@ -1,6 +1,7 @@
 import React, { useRef, useCallback, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import shaadiCover from "@/assets/shaadi-cover.jpg";
 
 interface Testimonial {
   name: string;
@@ -68,18 +69,21 @@ const BookTestimonial = ({ testimonials }: BookTestimonialProps) => {
         >
           {/* Cover Page */}
           <Page>
-            <div className="h-full bg-gradient-to-br from-primary to-primary/80 flex flex-col items-center justify-center p-8 text-primary-foreground">
-              <Quote className="h-12 w-12 mb-4 opacity-40" />
-              <h3 className="font-heading text-2xl font-bold text-center mb-2">
-                What Families Say
-              </h3>
-              <p className="font-body text-sm opacity-80 text-center">
-                Swipe or click to read testimonials
-              </p>
-              <div className="mt-6 flex gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-primary-foreground/60 text-primary-foreground/60" />
-                ))}
+            <div className="h-full relative overflow-hidden">
+              <img src={shaadiCover} alt="Shaadi" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent" />
+              <div className="relative h-full flex flex-col items-center justify-end p-8 pb-10 text-primary-foreground">
+                <h3 className="font-heading text-2xl font-bold text-center mb-1 drop-shadow-lg">
+                  What Families Say
+                </h3>
+                <p className="font-body text-sm opacity-90 text-center drop-shadow">
+                  Swipe or click to read
+                </p>
+                <div className="mt-4 flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-primary-foreground/80 text-primary-foreground/80" />
+                  ))}
+                </div>
               </div>
             </div>
           </Page>
