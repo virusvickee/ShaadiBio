@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FileText, Palette, Download, Eye, Star, Users, Shield, Heart, Quote, ChevronDown, Sparkles, Globe, Lock } from "lucide-react";
+import { FileText, Palette, Download, Eye, Star, Users, Shield, Heart, ChevronDown, Sparkles, Globe, Lock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import heroBg from "@/assets/hero-wedding.jpg";
@@ -14,8 +14,6 @@ import templateTraditional from "@/assets/template-traditional.jpg";
 import templateModern from "@/assets/template-modern.jpg";
 import templateMinimalist from "@/assets/template-minimalist.jpg";
 import testimonialSectionBg from "@/assets/testimonial-section-bg.jpg";
-import pricingFree from "@/assets/pricing-free.png";
-import pricingPremium from "@/assets/pricing-premium.png";
 
 
 const features = [
@@ -519,130 +517,176 @@ const Index = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-body font-semibold mb-4">
-              PRICING
-            </span>
             <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-4">
-              Simple, Transparent Pricing
+              We've Got A Plan That's
+              <br />
+              <span className="text-gradient-gold">Perfect For You</span>
             </h2>
-            <div className="ornament-divider max-w-xs mx-auto mb-4" />
             <p className="font-body text-muted-foreground max-w-lg mx-auto">
-              Start free and upgrade when you need more
+              Trusted by thousands of Indian families. Explore which option is right for you.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {/* Free Tier */}
+            {/* Starter Plan */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="group relative rounded-2xl border border-border bg-card p-6 flex flex-col overflow-hidden"
+              className="relative rounded-2xl border border-border bg-card p-8 flex flex-col"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="font-heading text-xl font-bold text-foreground">Starter</h3>
-                  <p className="font-body text-xs text-muted-foreground mt-1">Perfect to get started</p>
-                </div>
-              </div>
-              <div className="flex items-baseline gap-1 mb-4">
-                <span className="font-heading text-4xl font-bold text-foreground">₹0</span>
-                <span className="font-body text-muted-foreground text-sm">/ forever</span>
-              </div>
-              <div className="flex justify-center mb-6">
-                <img src={pricingFree} alt="Free tier" className="w-28 h-28 object-contain opacity-80 group-hover:scale-110 transition-transform duration-300" />
-              </div>
+              <h3 className="font-heading text-2xl font-bold text-foreground mb-2">Starter Plan</h3>
               <p className="font-body text-sm text-muted-foreground mb-6">
-                Create your first biodata with our essential tools and one beautiful template.
+                Great for creating your first biodata with essential features
               </p>
-              <ul className="space-y-2.5 mb-8 font-body text-sm text-muted-foreground flex-1">
-                {["1 Biodata Template", "Basic PDF Download", "Real-Time Preview", "Personal Details Form", "Mobile Friendly"].map((item) => (
-                  <li key={item} className="flex items-center gap-2">
-                    <Shield className="h-3.5 w-3.5 text-primary flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link to="/create">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-3 rounded-xl border border-border bg-secondary text-foreground font-body font-medium text-sm hover:bg-secondary/80 transition-colors"
-                >
-                  Get Started Free
-                </motion.button>
-              </Link>
+              <div className="flex items-baseline gap-1 mb-8">
+                <span className="font-heading text-5xl font-bold text-foreground">₹0</span>
+                <span className="font-body text-muted-foreground text-sm">/forever</span>
+              </div>
+
+              <div className="space-y-3 mb-8">
+                <Link to="/create">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-full py-3.5 rounded-xl bg-[hsl(var(--maroon-dark))] text-primary-foreground font-body font-semibold text-sm transition-colors"
+                  >
+                    Get Started
+                  </motion.button>
+                </Link>
+                <Link to="/create">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-full py-3.5 rounded-xl border border-border bg-card text-foreground font-body font-medium text-sm hover:bg-secondary transition-colors"
+                  >
+                    Try for Free
+                  </motion.button>
+                </Link>
+              </div>
+
+              <div className="border-t border-border pt-6">
+                <h4 className="font-heading text-xs font-bold text-foreground uppercase tracking-wider mb-1">Features</h4>
+                <p className="font-body text-xs text-muted-foreground mb-4">Free includes:</p>
+                <ul className="space-y-3 font-body text-sm text-foreground">
+                  {["1 Biodata Template", "Basic PDF Download", "Real-Time Preview", "Personal Details Form", "Mobile Friendly"].map((item) => (
+                    <li key={item} className="flex items-center gap-3">
+                      <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Shield className="h-3 w-3 text-primary" />
+                      </div>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </motion.div>
 
-            {/* Premium Tier */}
+            {/* Premium Plan */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="group relative rounded-2xl border-2 border-primary bg-card p-6 flex flex-col overflow-hidden shadow-elegant"
+              className="relative rounded-2xl border-2 border-primary bg-card p-8 flex flex-col shadow-elegant"
             >
-              <span className="absolute -top-0 right-6 px-3 py-1 rounded-b-lg bg-primary text-primary-foreground text-[10px] font-body font-bold uppercase tracking-wider">
-                Popular
-              </span>
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="font-heading text-xl font-bold text-foreground">Premium</h3>
-                  <p className="font-body text-xs text-muted-foreground mt-1">Best for serious matches</p>
-                </div>
-              </div>
-              <div className="flex items-baseline gap-1 mb-4">
-                <span className="font-heading text-4xl font-bold text-foreground">₹199</span>
-                <span className="font-body text-muted-foreground text-sm">/ one-time</span>
-              </div>
-              <div className="flex justify-center mb-6">
-                <img src={pricingPremium} alt="Premium tier" className="w-28 h-28 object-contain group-hover:scale-110 transition-transform duration-300" />
+              <div className="flex items-start justify-between mb-2">
+                <h3 className="font-heading text-2xl font-bold text-foreground">Premium Plan</h3>
+                <span className="px-3 py-1 rounded-full bg-accent text-accent-foreground text-[11px] font-body font-bold">
+                  Popular
+                </span>
               </div>
               <p className="font-body text-sm text-muted-foreground mb-6">
-                Unlock all templates, watermark-free HD exports, and custom styling options.
+                Best value for serious matches with all premium features
               </p>
-              <ul className="space-y-2.5 mb-8 font-body text-sm text-muted-foreground flex-1">
-                {["All 3 Premium Templates", "HD PDF Download", "Watermark-Free Export", "Custom Colors & Fonts", "Priority Support", "Unlimited Edits"].map((item) => (
-                  <li key={item} className="flex items-center gap-2">
-                    <Star className="h-3.5 w-3.5 text-accent fill-accent flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link to="/create">
-                <ShimmerButton className="w-full py-3 text-sm">
-                  Upgrade to Premium ✨
-                </ShimmerButton>
-              </Link>
+              <div className="flex items-baseline gap-1 mb-8">
+                <span className="font-heading text-5xl font-bold text-foreground">₹199</span>
+                <span className="font-body text-muted-foreground text-sm">/one-time</span>
+              </div>
+
+              <div className="space-y-3 mb-8">
+                <Link to="/create">
+                  <ShimmerButton className="w-full py-3.5 text-sm font-semibold">
+                    Get Started
+                  </ShimmerButton>
+                </Link>
+                <Link to="/create">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-full py-3.5 rounded-xl border border-border bg-card text-foreground font-body font-medium text-sm hover:bg-secondary transition-colors"
+                  >
+                    Upgrade Now
+                  </motion.button>
+                </Link>
+              </div>
+
+              <div className="border-t border-border pt-6">
+                <h4 className="font-heading text-xs font-bold text-foreground uppercase tracking-wider mb-1">Features</h4>
+                <p className="font-body text-xs text-muted-foreground mb-4">Everything in Starter, plus:</p>
+                <ul className="space-y-3 font-body text-sm text-foreground">
+                  {["All 3 Premium Templates", "HD PDF Download", "Watermark-Free Export", "Custom Colors & Fonts", "Priority Support", "Unlimited Edits"].map((item) => (
+                    <li key={item} className="flex items-center gap-3">
+                      <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
+                        <Star className="h-3 w-3 text-accent fill-accent" />
+                      </div>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </motion.div>
 
-            {/* Custom Request Card */}
+            {/* Enterprise / Custom Plan */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="group relative rounded-2xl border border-border bg-gradient-to-br from-secondary via-card to-secondary/50 p-6 flex flex-col items-center justify-center text-center md:col-span-2 lg:col-span-1"
+              className="relative rounded-2xl border border-border bg-card p-8 flex flex-col"
             >
-              <Sparkles className="h-10 w-10 text-accent mb-4" />
-              <h3 className="font-heading text-xl font-bold text-foreground mb-2">
-                Need Something Custom?
-              </h3>
-              <p className="font-body text-sm text-muted-foreground mb-8 max-w-xs">
-                Looking for a unique biodata design? Contact us and we'll create something special for your family.
+              <h3 className="font-heading text-2xl font-bold text-foreground mb-2">Custom Plan</h3>
+              <p className="font-body text-sm text-muted-foreground mb-6">
+                Unique biodata designs tailored for your family's special needs
               </p>
-              <motion.a
-                href="mailto:hello@shaadibio.com"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-8 py-3 rounded-xl border border-border bg-background text-foreground font-body font-medium text-sm hover:bg-secondary transition-colors"
-              >
-                Let's Talk →
-              </motion.a>
+              <div className="flex items-baseline gap-1 mb-8">
+                <span className="font-heading text-5xl font-bold text-foreground">₹499</span>
+                <span className="font-body text-muted-foreground text-sm">/one-time</span>
+              </div>
+
+              <div className="space-y-3 mb-8">
+                <motion.a
+                  href="mailto:hello@shaadibio.com"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="block w-full py-3.5 rounded-xl bg-[hsl(var(--maroon-dark))] text-primary-foreground font-body font-semibold text-sm text-center transition-colors"
+                >
+                  Get Started
+                </motion.a>
+                <motion.a
+                  href="mailto:hello@shaadibio.com"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="block w-full py-3.5 rounded-xl border border-border bg-card text-foreground font-body font-medium text-sm text-center hover:bg-secondary transition-colors"
+                >
+                  Let's Talk
+                </motion.a>
+              </div>
+
+              <div className="border-t border-border pt-6">
+                <h4 className="font-heading text-xs font-bold text-foreground uppercase tracking-wider mb-1">Features</h4>
+                <p className="font-body text-xs text-muted-foreground mb-4">Everything in Premium, plus:</p>
+                <ul className="space-y-3 font-body text-sm text-foreground">
+                  {["Custom Design Layout", "Dedicated Designer", "Multiple Revisions", "Family Branding", "Express Delivery"].map((item) => (
+                    <li key={item} className="flex items-center gap-3">
+                      <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Sparkles className="h-3 w-3 text-primary" />
+                      </div>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </motion.div>
           </div>
         </div>
