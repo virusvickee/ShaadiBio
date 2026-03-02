@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { BiodataFormData, defaultBiodataForm } from "@/types/biodata";
 import PersonalDetailsForm from "@/components/biodata/PersonalDetailsForm";
 import FamilyEducationForm from "@/components/biodata/FamilyEducationForm";
@@ -6,7 +6,9 @@ import ContactHoroscopeForm from "@/components/biodata/ContactHoroscopeForm";
 import BiodataPreview from "@/components/biodata/BiodataPreview";
 import ModernTemplate from "@/components/biodata/ModernTemplate";
 import Navbar from "@/components/Navbar";
+import StepIndicator from "@/components/ui/StepIndicator";
 import { ArrowLeft, ArrowRight, Eye, EyeOff, Download, Palette, LayoutTemplate, Save } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -88,35 +90,18 @@ const CreateBiodata = () => {
           <p className="font-body text-muted-foreground">Fill in your details and preview in real-time</p>
         </div>
 
-        {/* Step Indicator */}
-        <div className="flex items-center justify-center gap-2 mb-8 flex-wrap">
-          {steps.map((step, idx) => (
-            <button
-              key={step}
-              onClick={() => setCurrentStep(idx)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-body transition-colors ${
-                idx === currentStep
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-muted-foreground hover:bg-secondary/80"
-              }`}
-            >
-              <span className="w-5 h-5 rounded-full bg-background/20 flex items-center justify-center text-xs font-semibold">
-                {idx + 1}
-              </span>
-              <span className="hidden sm:inline">{step}</span>
-            </button>
-          ))}
-        </div>
+        <StepIndicator steps={steps} currentStep={currentStep} onStepClick={setCurrentStep} />
 
         {/* Mobile Preview Toggle */}
         <div className="lg:hidden flex justify-center mb-4">
-          <button
+          <motion.button
+            whileTap={{ scale: 0.95 }}
             onClick={() => setShowPreview(!showPreview)}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-foreground font-body text-sm"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-secondary text-foreground font-body text-sm border border-border"
           >
             {showPreview ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             {showPreview ? "Show Form" : "Show Preview"}
-          </button>
+          </motion.button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -145,26 +130,38 @@ const CreateBiodata = () => {
                 )}
               </div>
 
-              {currentStep === 0 && <PersonalDetailsForm data={formData} onChange={handleChange} />}
-              {currentStep === 1 && <FamilyEducationForm data={formData} onChange={handleChange} />}
-              {currentStep === 2 && <ContactHoroscopeForm data={formData} onChange={handleChange} />}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentStep}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {currentStep === 0 && <PersonalDetailsForm data={formData} onChange={handleChange} />}
+                  {currentStep === 1 && <FamilyEducationForm data={formData} onChange={handleChange} />}
+                  {currentStep === 2 && <ContactHoroscopeForm data={formData} onChange={handleChange} />}
+                </motion.div>
+              </AnimatePresence>
 
               {/* Navigation */}
               <div className="flex justify-between mt-8">
-                <button
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
                   disabled={currentStep === 0}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-foreground font-body text-sm disabled:opacity-40"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-secondary text-foreground font-body text-sm disabled:opacity-40 border border-border"
                 >
                   <ArrowLeft className="h-4 w-4" /> Previous
-                </button>
-                <button
+                </motion.button>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
                   disabled={currentStep === steps.length - 1}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-body text-sm disabled:opacity-40"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-body text-sm disabled:opacity-40"
                 >
                   Next <ArrowRight className="h-4 w-4" />
-                </button>
+                </motion.button>
               </div>
             </div>
           </div>
