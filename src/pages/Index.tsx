@@ -378,8 +378,8 @@ const Index = () => {
       {/* Testimonials */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-            {/* Left Content */}
+          <div className="flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-16">
+            {/* Left Content (appears below book on mobile) */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -422,12 +422,12 @@ const Index = () => {
               </Link>
             </motion.div>
 
-            {/* Right Book */}
+            {/* Right Book (appears on top on mobile) */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20, x: 0 }}
+              whileInView={{ opacity: 1, y: 0, x: 0 }}
               viewport={{ once: true }}
-              className="flex-shrink-0"
+              className="flex-shrink-0 w-full lg:w-auto flex justify-center"
             >
               <BookTestimonial testimonials={testimonials} />
             </motion.div>
