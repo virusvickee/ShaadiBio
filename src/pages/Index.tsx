@@ -508,8 +508,92 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Pricing Section */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-body font-semibold mb-4">
+              PRICING
+            </span>
+            <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-4">
+              Simple, Transparent Pricing
+            </h2>
+            <div className="ornament-divider max-w-xs mx-auto mb-4" />
+            <p className="font-body text-muted-foreground max-w-lg mx-auto">
+              Start free and upgrade when you need more
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+            {/* Free Tier */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="relative rounded-xl border border-border bg-card p-8"
+            >
+              <h3 className="font-heading text-2xl font-bold text-foreground mb-2">Free</h3>
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className="font-heading text-4xl font-bold text-foreground">₹0</span>
+                <span className="font-body text-muted-foreground text-sm">/ forever</span>
+              </div>
+              <ul className="space-y-3 mb-8 font-body text-sm text-muted-foreground">
+                {["1 Biodata Template", "Basic PDF Download", "Real-Time Preview", "Personal Details Form", "Mobile Friendly"].map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <Shield className="h-4 w-4 text-primary flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/create">
+                <ShimmerButton className="w-full py-3 text-sm bg-secondary text-secondary-foreground">
+                  Get Started Free
+                </ShimmerButton>
+              </Link>
+            </motion.div>
+
+            {/* Premium Tier */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="relative rounded-xl border-2 border-primary bg-card p-8 shadow-elegant"
+            >
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-body font-semibold">
+                MOST POPULAR
+              </span>
+              <h3 className="font-heading text-2xl font-bold text-foreground mb-2">Premium</h3>
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className="font-heading text-4xl font-bold text-foreground">₹199</span>
+                <span className="font-body text-muted-foreground text-sm">/ one-time</span>
+              </div>
+              <ul className="space-y-3 mb-8 font-body text-sm text-muted-foreground">
+                {["All 3 Premium Templates", "HD PDF Download", "Watermark-Free Export", "Custom Colors & Fonts", "Priority Support", "Unlimited Edits"].map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <Star className="h-4 w-4 text-accent fill-accent flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/create">
+                <ShimmerButton className="w-full py-3 text-sm">
+                  Upgrade to Premium ✨
+                </ShimmerButton>
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-24 bg-background relative overflow-hidden">
+      <section className="py-24 bg-secondary/20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-5">
           <div
             className="absolute inset-0 bg-cover bg-center"
