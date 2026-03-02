@@ -9,6 +9,9 @@ import AnimatedText from "@/components/ui/AnimatedText";
 import GlowCard from "@/components/ui/GlowCard";
 import ShimmerButton from "@/components/ui/ShimmerButton";
 import FloatingParticles from "@/components/ui/FloatingParticles";
+import templateTraditional from "@/assets/template-traditional.jpg";
+import templateModern from "@/assets/template-modern.jpg";
+import templateMinimalist from "@/assets/template-minimalist.jpg";
 
 
 const features = [
@@ -272,7 +275,67 @@ const Index = () => {
       </section>
 
 
-      {/* Highlights / Why ShaadiBio */}
+      {/* Template Showcase */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-body font-semibold mb-4">
+              TEMPLATES
+            </span>
+            <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-4">
+              Choose Your Style
+            </h2>
+            <div className="ornament-divider max-w-xs mx-auto mb-4" />
+            <p className="font-body text-muted-foreground max-w-lg mx-auto">
+              Three stunning templates designed for Indian families
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {[
+              { name: "Traditional", desc: "Classic Indian biodata with ornamental dividers, Ganesh invocation, and warm gold accents.", img: templateTraditional },
+              { name: "Modern", desc: "Clean card-based layout with customizable accent colors and a contemporary professional look.", img: templateModern },
+              { name: "Minimalist", desc: "Elegant refined design with generous whitespace, thin accents, and understated typography.", img: templateMinimalist },
+            ].map((tmpl, i) => (
+              <motion.div
+                key={tmpl.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="group flex flex-col"
+              >
+                <div className="relative rounded-xl border border-border overflow-hidden mb-4 bg-secondary/20">
+                  <img
+                    src={tmpl.img}
+                    alt={`${tmpl.name} template preview`}
+                    className="w-full h-72 object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                    <Link to="/create">
+                      <ShimmerButton className="px-5 py-2 text-sm">
+                        Try {tmpl.name}
+                      </ShimmerButton>
+                    </Link>
+                  </div>
+                </div>
+                <h3 className="font-heading text-lg font-bold text-foreground mb-1">{tmpl.name}</h3>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed mb-3 flex-1">{tmpl.desc}</p>
+                <Link to="/create" className="inline-flex items-center gap-1.5 text-sm font-body font-medium text-primary hover:underline">
+                  Try this template →
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="py-24 bg-secondary/20">
         <div className="container mx-auto px-4">
           <motion.div
