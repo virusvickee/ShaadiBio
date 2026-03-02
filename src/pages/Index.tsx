@@ -9,6 +9,45 @@ import AnimatedText from "@/components/ui/AnimatedText";
 import GlowCard from "@/components/ui/GlowCard";
 import ShimmerButton from "@/components/ui/ShimmerButton";
 import FloatingParticles from "@/components/ui/FloatingParticles";
+import BiodataPreview from "@/components/biodata/BiodataPreview";
+import ModernTemplate from "@/components/biodata/ModernTemplate";
+import MinimalistTemplate from "@/components/biodata/MinimalistTemplate";
+import { BiodataFormData } from "@/types/biodata";
+
+const sampleData: BiodataFormData = {
+  fullName: "Priya Sharma",
+  gender: "Female",
+  dateOfBirth: "1997-05-15",
+  height: "5'4\"",
+  religion: "Hindu",
+  caste: "Brahmin",
+  motherTongue: "Hindi",
+  maritalStatus: "Never Married",
+  nationality: "Indian",
+  phone: "+91 98765 43210",
+  email: "priya@example.com",
+  address: "Mumbai, Maharashtra",
+  hideContact: false,
+  education: "MBA - IIM Ahmedabad",
+  occupation: "Product Manager",
+  company: "Google India",
+  income: "25 LPA",
+  hideIncome: false,
+  fatherName: "Shri Ramesh Sharma",
+  fatherOccupation: "Businessman",
+  motherName: "Smt. Sunita Sharma",
+  motherOccupation: "Homemaker",
+  siblings: "1 Elder Brother (Married)",
+  familyType: "Nuclear",
+  familyStatus: "Upper Middle Class",
+  nativePlace: "Jaipur, Rajasthan",
+  rashi: "Vrishabha",
+  nakshatra: "Rohini",
+  gotra: "Bharadwaj",
+  timeOfBirth: "10:30 AM",
+  placeOfBirth: "Jaipur",
+  photoUrl: "",
+};
 
 const features = [
   {
@@ -69,13 +108,18 @@ const testimonials = [
 const templates = [
   {
     name: "Traditional",
-    description: "Classic Indian biodata with ornamental dividers, Ganesh invocation, and warm gold accents. Perfect for traditional families.",
-    color: "from-primary/20 to-accent/10",
+    description: "Classic Indian biodata with ornamental dividers, Ganesh invocation, and warm gold accents.",
+    component: <BiodataPreview data={sampleData} />,
   },
   {
     name: "Modern",
-    description: "Clean, card-based layout with customizable accent colors, grid information display, and a contemporary professional look.",
-    color: "from-accent/20 to-primary/10",
+    description: "Clean, card-based layout with customizable accent colors and a contemporary professional look.",
+    component: <ModernTemplate data={sampleData} accentColor="#b91c4a" />,
+  },
+  {
+    name: "Minimalist",
+    description: "Elegant and refined design with generous whitespace, thin accents, and understated typography.",
+    component: <MinimalistTemplate data={sampleData} accentColor="#1e3a5f" />,
   },
 ];
 
@@ -101,7 +145,7 @@ const faqs = [
   },
   {
     q: "How many templates are available?",
-    a: "Currently we offer two beautiful templates — Traditional and Modern — each with multiple color customization options. More templates are being added regularly.",
+    a: "We offer three beautiful templates — Traditional, Modern, and Minimalist — each with multiple color customization options. More templates are being added regularly.",
   },
   {
     q: "Can I edit my biodata after saving?",
@@ -299,29 +343,31 @@ const Index = () => {
             </h2>
             <div className="ornament-divider max-w-xs mx-auto mb-4" />
             <p className="font-body text-muted-foreground max-w-lg mx-auto">
-              Two stunning templates designed for Indian families, with more coming soon
+              Three stunning templates designed for Indian families
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {templates.map((tmpl, i) => (
-              <GlowCard key={tmpl.name} delay={i * 0.15}>
-                <div className="p-8">
-                  <div className={`w-full h-48 rounded-xl bg-gradient-to-br ${tmpl.color} flex items-center justify-center mb-6 border border-border/50`}>
-                    <div className="text-center">
-                      <div className="w-16 h-16 rounded-2xl bg-card/80 backdrop-blur-sm border border-border mx-auto flex items-center justify-center mb-3">
-                        <Palette className="h-8 w-8 text-primary" />
-                      </div>
-                      <span className="font-heading text-sm font-semibold text-foreground">{tmpl.name} Template</span>
-                    </div>
+              <motion.div
+                key={tmpl.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="flex flex-col"
+              >
+                <div className="relative rounded-xl border border-border overflow-hidden mb-4 bg-secondary/20 p-3">
+                  <div className="origin-top-left scale-[0.55] w-[182%] pointer-events-none">
+                    {tmpl.component}
                   </div>
-                  <h3 className="font-heading text-xl font-bold text-foreground mb-2">{tmpl.name}</h3>
-                  <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">{tmpl.description}</p>
-                  <Link to="/create" className="inline-flex items-center gap-1.5 text-sm font-body font-medium text-primary hover:underline">
-                    Try this template →
-                  </Link>
                 </div>
-              </GlowCard>
+                <h3 className="font-heading text-lg font-bold text-foreground mb-1">{tmpl.name}</h3>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed mb-3 flex-1">{tmpl.description}</p>
+                <Link to="/create" className="inline-flex items-center gap-1.5 text-sm font-body font-medium text-primary hover:underline">
+                  Try this template →
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
