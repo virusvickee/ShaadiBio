@@ -1,6 +1,8 @@
-import { Heart, Mail, Phone, MapPin, Facebook, Instagram, Twitter } from "lucide-react";
+import { Heart, Mail, Phone, MapPin, Facebook, Instagram, Twitter, Send } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const footerLinks = [
   {
@@ -32,6 +34,46 @@ const TextHoverEffect = ({ text }: { text: string }) => (
   </span>
 );
 
+const NewsletterSignup = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    setLoading(true);
+    setTimeout(() => {
+      toast.success("Thanks for subscribing! 🎉");
+      setEmail("");
+      setLoading(false);
+    }, 800);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex gap-2 max-w-xs">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Your email"
+        className="flex-1 px-3 py-2 rounded-lg bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))]/20 text-primary-foreground placeholder:text-[hsl(var(--gold-light))]/40 font-body text-sm focus:outline-none focus:border-[hsl(var(--gold))]/50 transition-colors"
+      />
+      <motion.button
+        type="submit"
+        disabled={loading}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="px-3 py-2 rounded-lg bg-[hsl(var(--gold))] text-[hsl(var(--maroon-dark))] font-body text-sm font-medium disabled:opacity-50 flex items-center gap-1"
+      >
+        <Send className="h-3.5 w-3.5" />
+      </motion.button>
+    </form>
+  );
+};
+
 const Footer = () => {
   return (
     <footer className="relative bg-[hsl(var(--maroon-dark))] overflow-hidden pt-16 pb-8">
@@ -46,9 +88,12 @@ const Footer = () => {
                 Shaadi<span className="text-[hsl(var(--gold))]">Bio</span>
               </span>
             </div>
-            <p className="font-body text-sm text-[hsl(var(--gold-light))]/70 leading-relaxed max-w-xs">
+            <p className="font-body text-sm text-[hsl(var(--gold-light))]/70 leading-relaxed max-w-xs mb-5">
               Create beautiful marriage biodata with elegant templates trusted by thousands of Indian families.
             </p>
+
+            {/* Newsletter Signup */}
+            <NewsletterSignup />
           </div>
 
           {/* Link Columns */}
