@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SubscriptionTier {
+  FREE
+  PREMIUM
+  CUSTOM
+}
+
+enum TemplateType {
+  TRADITIONAL
+  MODERN
+  MINIMALIST
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PlanType {
+  PREMIUM
+  CUSTOM
+}
+
+model User {
+  id                    String            @id @default(uuid())
+  email                 String            @unique
+  passwordHash          String            @map("password_hash")
+  name                  String
+  phone                 String?
+  subscriptionTier      SubscriptionTier  @default(FREE) @map("subscription_tier")
+  subscriptionExpiresAt DateTime?         @map("subscription_expires_at")
+  createdAt             DateTime          @default(now()) @map("created_at")
+  updatedAt             DateTime          @updatedAt @map("updated_at")
+  
+  biodatas              Biodata[]
+  payments              Payment[]
+
+  @@map("users")
+}
+
+model Biodata {
+  id              String        @id @default(uuid())
+  userId          String        @map("user_id")
+  title           String
+  templateType    TemplateType  @map("template_type")
+  formData        Json          @map("form_data")
+  customization   Json          @default("{}")
+  isPublished     Boolean       @default(false) @map("is_published")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  photos          Photo[]
+  pdfs            Pdf[]
+
+  @@index([userId])
+  @@map("biodatas")
+}
+
+model Photo {
+  id          String    @id @default(uuid())
+  biodataId   String    @map("biodata_id")
+  url         String
+  cropData    Json?     @map("crop_data")
+  fileSize    Int       @map("file_size")
+  uploadedAt  DateTime  @default(now()) @map("uploaded_at")
+  
+  biodata     Biodata   @relation(fields: [biodataId], references: [id], onDelete: Cascade)
+
+  @@index([biodataId])
+  @@map("photos")
+}
+
+model Pdf {
+  id              String    @id @default(uuid())
+  biodataId       String    @map("biodata_id")
+  url             String
+  hasWatermark    Boolean   @default(true) @map("has_watermark")
+  downloadCount   Int       @default(0) @map("download_count")
+  generatedAt     DateTime  @default(now()) @map("generated_at")
+  
+  biodata         Biodata   @relation(fields: [biodataId], references: [id], onDelete: Cascade)
+
+  @@index([biodataId])
+  @@map("pdfs")
+}
+
+model Payment {
+  id                String        @id @default(uuid())
+  userId            String        @map("user_id")
+  amount            Decimal       @db.Decimal(10, 2)
+  currency          String        @default("INR")
+  status            PaymentStatus @default(PENDING)
+  paymentGatewayId  String?       @map("payment_gateway_id")
+  planType          PlanType      @map("plan_type")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("payments")
+}
