@@ -18,7 +18,7 @@ fi
 if [ ! -f .env ]; then
     echo "⚠️  .env file not found. Creating from .env.example..."
     cp .env.example .env
-    echo "✅ Created .env file. Please update DATABASE_URL and other secrets."
+    echo "✅ Created .env file. Please update MONGODB_URI and other secrets."
     echo ""
     read -p "Press enter to continue after updating .env..."
 fi
@@ -30,22 +30,12 @@ if ! npm install; then
     exit 1
 fi
 
-# Generate Prisma Client
-echo "🔧 Generating Prisma Client..."
-if ! npm run prisma:generate; then
-    echo "❌ Failed to generate Prisma Client"
-    exit 1
-fi
-
-# Run migrations
-echo "🗄️  Running database migrations..."
-if ! npm run prisma:migrate; then
-    echo "❌ Failed to run database migrations"
-    exit 1
-fi
-
 echo ""
 echo "✅ Setup complete!"
+echo ""
+echo "⚠️  Make sure MongoDB is running:"
+echo "  - Local: mongod"
+echo "  - Or use MongoDB Atlas (cloud)"
 echo ""
 echo "To start the development server, run:"
 echo "  npm run dev"

@@ -234,6 +234,44 @@ POST /api/biodatas/:id/duplicate
 Authorization: Bearer <token>
 ```
 
+### File Upload
+
+#### Upload Photo
+```http
+POST /api/upload/photo
+Authorization: Bearer <token>
+Content-Type: multipart/form-data
+
+Form Data:
+- photo: File (max 5MB, JPEG/PNG/WebP)
+- biodataId: string
+- cropData: JSON string (optional)
+```
+
+#### Delete Photo
+```http
+DELETE /api/upload/photo/:id
+Authorization: Bearer <token>
+```
+
+#### Get Photos for Biodata
+```http
+GET /api/upload/photos/:biodataId
+Authorization: Bearer <token>
+```
+
+## Rate Limiting
+
+All endpoints are rate limited:
+- **General API**: 100 requests per 15 minutes
+- **Auth endpoints** (login/register): 5 attempts per 15 minutes
+- **Upload endpoints**: 20 uploads per hour
+
+Rate limit info is returned in headers:
+- `X-RateLimit-Limit`: Maximum requests allowed
+- `X-RateLimit-Remaining`: Requests remaining
+- `X-RateLimit-Reset`: Time when limit resets
+
 ## Database Schema
 
 - **Users**: User accounts with authentication
@@ -248,6 +286,9 @@ Authorization: Bearer <token>
 - **Framework**: Express.js
 - **Database**: PostgreSQL
 - **ORM**: Prisma
+- **Validation**: Zod
+- **File Upload**: Multer + AWS S3
+- **Rate Limiting**: express-rate-limit
 - **Auth**: JWT + bcrypt
 - **Validation**: Zod (planned)
 
@@ -266,14 +307,16 @@ npm start
 
 ## Next Steps
 
-### In Progress
-- [ ] **Rate limiting** - Using express-rate-limit middleware for auth and sensitive endpoints
-- [ ] **Input validation with Zod** - Request/response schemas for all public handlers
+### ✅ Completed (Step 2)
+- ✅ **Rate limiting** - express-rate-limit for auth (5/15min), API (100/15min), uploads (20/hour)
+- ✅ **Input validation with Zod** - All auth and biodata endpoints validated
+- ✅ **File upload system** - Multer + S3 integration with local fallback
+
+### In Progress (Step 3)
+- [ ] **PDF generation** - Puppeteer for server-side PDF generation
+- [ ] **Email notifications** - SendGrid/AWS SES integration
 - [ ] **Unit tests** - Jest/Vitest with target coverage ≥80%
 
 ### Planned
-- [ ] Add file upload endpoints (S3/local storage)
-- [ ] Add PDF generation endpoints
 - [ ] Add payment integration (Razorpay)
-- [ ] Add email notifications
 - [ ] Add API documentation (Swagger)
