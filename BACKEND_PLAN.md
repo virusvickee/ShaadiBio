@@ -18,7 +18,7 @@
 ```sql
 users
   - id (UUID, PK)
-  - email (VARCHAR, UNIQUE)
+  - email (VARCHAR, UNIQUE, INDEX)
   - password_hash (VARCHAR)
   - name (VARCHAR)
   - phone (VARCHAR)
@@ -26,13 +26,15 @@ users
   - subscription_expires_at (TIMESTAMP)
   - created_at (TIMESTAMP)
   - updated_at (TIMESTAMP)
+  - deleted_at (TIMESTAMP, nullable) -- soft delete
+  - updated_by (UUID, nullable) -- audit trail
 ```
 
 ### Biodatas Table
 ```sql
 biodatas
   - id (UUID, PK)
-  - user_id (UUID, FK -> users)
+  - user_id (UUID, FK -> users ON DELETE CASCADE, INDEX)
   - title (VARCHAR)
   - template_type (ENUM: traditional, modern, minimalist)
   - form_data (JSONB)
@@ -43,96 +45,108 @@ biodatas
       language: string
     }
   - is_published (BOOLEAN)
-  - created_at (TIMESTAMP)
+  - created_at (TIMESTAMP, INDEX)
   - updated_at (TIMESTAMP)
+  - deleted_at (TIMESTAMP, nullable) -- soft delete
+  - updated_by (UUID, nullable) -- audit trail
 ```
 
 ### Photos Table
 ```sql
 photos
   - id (UUID, PK)
-  - biodata_id (UUID, FK -> biodatas)
+  - biodata_id (UUID, FK -> biodatas ON DELETE CASCADE, INDEX)
   - url (VARCHAR)
   - crop_data (JSONB)
   - file_size (INTEGER)
   - uploaded_at (TIMESTAMP)
+  - deleted_at (TIMESTAMP, nullable) -- soft delete
 ```
 
 ### PDFs Table
 ```sql
 pdfs
   - id (UUID, PK)
-  - biodata_id (UUID, FK -> biodatas)
+  - biodata_id (UUID, FK -> biodatas ON DELETE CASCADE, INDEX)
   - url (VARCHAR)
   - has_watermark (BOOLEAN)
   - download_count (INTEGER)
   - generated_at (TIMESTAMP)
+  - deleted_at (TIMESTAMP, nullable) -- soft delete
 ```
 
 ### Payments Table
 ```sql
 payments
   - id (UUID, PK)
-  - user_id (UUID, FK -> users)
+  - user_id (UUID, FK -> users ON DELETE RESTRICT, INDEX)
   - amount (DECIMAL)
   - currency (VARCHAR)
   - status (ENUM: pending, completed, failed, refunded)
-  - payment_gateway_id (VARCHAR)
+  - payment_gateway_id (VARCHAR, UNIQUE) -- prevent duplicates
   - plan_type (ENUM: premium, custom)
   - created_at (TIMESTAMP)
+  - updated_at (TIMESTAMP) -- audit status changes
 ```
 
 ## API Endpoints
 
+### Health Check
+```
+GET    /api/health                # Health check for monitoring
+```
+
 ### Authentication
 ```
-POST   /api/auth/register
-POST   /api/auth/login
-POST   /api/auth/logout
-POST   /api/auth/refresh-token
-POST   /api/auth/forgot-password
-POST   /api/auth/reset-password
-GET    /api/auth/me
+POST   /api/v1/auth/register
+POST   /api/v1/auth/login
+POST   /api/v1/auth/logout
+POST   /api/v1/auth/refresh-token
+POST   /api/v1/auth/forgot-password
+POST   /api/v1/auth/reset-password
+GET    /api/v1/auth/me
 ```
 
 ### Biodata Management
 ```
-GET    /api/biodatas              # List user's biodatas
-POST   /api/biodatas              # Create new biodata
-GET    /api/biodatas/:id          # Get single biodata
-PUT    /api/biodatas/:id          # Update biodata
-DELETE /api/biodatas/:id          # Delete biodata
-POST   /api/biodatas/:id/duplicate # Duplicate biodata
+GET    /api/v1/biodatas              # List user's biodatas
+                                     # Query params: ?page=1&limit=10&sort=created_at:desc&filter=status:active&q=search
+POST   /api/v1/biodatas              # Create new biodata
+GET    /api/v1/biodatas/:id          # Get single biodata
+PUT    /api/v1/biodatas/:id          # Update biodata
+DELETE /api/v1/biodatas/:id          # Delete biodata
+POST   /api/v1/biodatas/:id/duplicate # Duplicate biodata
 ```
 
 ### PDF Generation
 ```
-POST   /api/biodatas/:id/generate-pdf    # Generate PDF
-GET    /api/biodatas/:id/download        # Download PDF
-GET    /api/biodatas/:id/pdf-status      # Check generation status
+POST   /api/v1/biodatas/:id/generate-pdf    # Generate PDF
+GET    /api/v1/biodatas/:id/download        # Download PDF
+GET    /api/v1/biodatas/:id/pdf-status      # Check generation status
 ```
 
 ### File Upload
 ```
-POST   /api/upload/photo          # Upload photo
-DELETE /api/upload/photo/:id      # Delete photo
-POST   /api/upload/crop           # Crop uploaded photo
+POST   /api/v1/upload/photo          # Upload photo
+DELETE /api/v1/upload/photo/:id      # Delete photo
+POST   /api/v1/upload/crop           # Crop uploaded photo
 ```
 
 ### Payments
 ```
-POST   /api/payments/create-order      # Create payment order
-POST   /api/payments/verify            # Verify payment
-GET    /api/payments/history           # Payment history
-GET    /api/payments/invoice/:id       # Download invoice
+POST   /api/v1/payments/create-order      # Create payment order
+POST   /api/v1/payments/verify            # Verify payment
+GET    /api/v1/payments/history           # Payment history (supports ?page=1&limit=10)
+GET    /api/v1/payments/invoice/:id       # Download invoice
 ```
 
 ### User Profile
 ```
-GET    /api/user/profile
-PUT    /api/user/profile
-GET    /api/user/subscription
-DELETE /api/user/account
+GET    /api/v1/user/profile
+PUT    /api/v1/user/profile
+GET    /api/v1/user/subscription
+DELETE /api/v1/user/account
+GET    /api/v1/user/export-data          # GDPR data export
 ```
 
 ## Core Features
@@ -140,6 +154,9 @@ DELETE /api/user/account
 ### Phase 1 - MVP (Week 1-2)
 - [ ] User registration & login
 - [ ] JWT authentication
+- [ ] Rate limiting
+- [ ] Input validation & sanitization
+- [ ] Email verification
 - [ ] Save/load biodata drafts
 - [ ] Basic CRUD for biodatas
 - [ ] Photo upload to S3
@@ -148,10 +165,7 @@ DELETE /api/user/account
 ### Phase 2 - Essential (Week 3-4)
 - [ ] Server-side PDF generation with Puppeteer
 - [ ] Watermark management
-- [ ] Email verification
 - [ ] Password reset flow
-- [ ] Rate limiting
-- [ ] Input validation & sanitization
 
 ### Phase 3 - Premium (Week 5-6)
 - [ ] Razorpay integration
@@ -177,9 +191,20 @@ DELETE /api/user/account
 - Input validation (Zod)
 - SQL injection prevention (Prisma)
 - XSS protection (helmet.js)
+- CSRF protection (csurf middleware or double-submit cookie pattern on POST/PUT/DELETE)
 - File upload validation (size, type, malware scan)
 - HTTPS only in production
 - Environment variables for secrets
+- Data encryption at rest (field-level for PII: email/phone, DB encryption)
+- Secret rotation strategy (JWT secret versioning, API key rotation, DB credential rotation via secrets manager)
+
+### GDPR & Data Privacy
+- Data Retention Policy (define retention periods)
+- Right to Erasure (DELETE /api/v1/user/account with audit logging)
+- Data Export (GET /api/v1/user/export-data)
+- Cookie consent handling
+- Privacy Policy compliance
+- Audit logging for all erasure/export/rotation operations
 
 ## Environment Variables
 
@@ -192,29 +217,45 @@ API_URL=http://localhost:3000
 # Database
 DATABASE_URL=postgresql://user:pass@localhost:5432/shaadibio
 
-# JWT
-JWT_SECRET=your-secret-key
-JWT_REFRESH_SECRET=your-refresh-secret
+# JWT - Generate with: openssl rand -base64 32
+# IMPORTANT: Use secrets manager in production (AWS Secrets Manager, HashiCorp Vault)
+# Rotate periodically and implement token versioning/blacklist
+JWT_SECRET=REPLACE_WITH_GENERATED_SECRET
+JWT_REFRESH_SECRET=REPLACE_WITH_GENERATED_SECRET
 JWT_EXPIRES_IN=15m
 JWT_REFRESH_EXPIRES_IN=7d
 
-# AWS S3
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_REGION=ap-south-1
-AWS_S3_BUCKET=shaadibio-uploads
+# CORS
+CORS_ORIGIN=http://localhost:5173
+FRONTEND_URL=http://localhost:5173
 
-# Razorpay
-RAZORPAY_KEY_ID=
-RAZORPAY_KEY_SECRET=
+# AWS S3 - Generate with: aws iam create-access-key
+# Use IAM roles in production, rotate keys regularly
+AWS_ACCESS_KEY_ID=REPLACE_WITH_AWS_KEY
+AWS_SECRET_ACCESS_KEY=REPLACE_WITH_AWS_SECRET
+AWS_REGION=<your-region>
+AWS_S3_BUCKET=<your-bucket-name>
 
-# Email (SendGrid/AWS SES)
-EMAIL_FROM=noreply@shaadibio.com
-SENDGRID_API_KEY=
+# Razorpay - Obtain from Razorpay dashboard
+# Store in secrets manager, never commit to source control
+RAZORPAY_KEY_ID=REPLACE_WITH_RAZORPAY_KEY
+RAZORPAY_KEY_SECRET=REPLACE_WITH_RAZORPAY_SECRET
+
+# Email (SendGrid/AWS SES) - Generate API key from provider
+# Rotate regularly, use least-privilege access
+EMAIL_FROM=noreply@example.com
+SENDGRID_API_KEY=REPLACE_WITH_SENDGRID_KEY
 
 # Redis (optional)
 REDIS_URL=redis://localhost:6379
 ```
+
+**Production Secret Management:**
+- Use AWS Secrets Manager, HashiCorp Vault, or CI/CD secret injection
+- Implement least-privilege access policies
+- Rotate secrets regularly (90-day cycle recommended)
+- Never commit secrets to source control
+- Use environment-specific configurations
 
 ## Project Structure
 

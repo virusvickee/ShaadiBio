@@ -18,10 +18,23 @@ export const authenticate = async (
       throw new AppError('Authentication required', 401);
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET not configured');
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    if (typeof decoded === 'string' || !decoded.userId || typeof decoded.userId !== 'string') {
+      throw new AppError('Invalid token payload', 401);
+    }
+    
     req.userId = decoded.userId;
     next();
   } catch (error) {
-    next(new AppError('Invalid or expired token', 401));
+    if (error instanceof AppError) {
+      next(error);
+    } else {
+      next(new AppError('Invalid or expired token', 401));
+    }
   }
 };

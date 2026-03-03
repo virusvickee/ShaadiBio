@@ -101,11 +101,12 @@ model Payment {
   amount            Decimal       @db.Decimal(10, 2)
   currency          String        @default("INR")
   status            PaymentStatus @default(PENDING)
-  paymentGatewayId  String?       @map("payment_gateway_id")
+  paymentGatewayId  String?       @unique @map("payment_gateway_id")
   planType          PlanType      @map("plan_type")
   createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
   
-  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User          @relation(fields: [userId], references: [id], onDelete: Restrict)
 
   @@index([userId])
   @@map("payments")

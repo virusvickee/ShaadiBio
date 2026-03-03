@@ -42,7 +42,11 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
 export const getMe = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const user = await authService.getMe(req.userId!);
+    if (!req.userId) {
+      return next(new AppError('Authentication required', 401));
+    }
+
+    const user = await authService.getMe(req.userId);
 
     res.json({
       success: true,

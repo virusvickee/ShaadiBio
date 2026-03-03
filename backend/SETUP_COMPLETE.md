@@ -90,6 +90,19 @@ cp .env.example .env
 # Edit .env and add your DATABASE_URL
 ```
 
+Required environment variables:
+- **DATABASE_URL**: PostgreSQL connection string (e.g., `postgresql://user:pass@localhost:5432/shaadibio`)
+- **JWT_SECRET**: Generate with `openssl rand -base64 32` (minimum 32 bytes)
+- **JWT_REFRESH_SECRET**: Generate with `openssl rand -base64 32` (minimum 32 bytes)
+- **PORT**: Server port (default: 3000)
+- **NODE_ENV**: Environment (development/production)
+- **FRONTEND_URL**: Frontend URL for CORS (e.g., `http://localhost:5173`)
+
+Example DATABASE_URL formats:
+- Local: `postgresql://localhost:5432/shaadibio`
+- Railway: `postgresql://user:pass@containers-us-west-123.railway.app:5432/railway`
+- Supabase: `postgresql://postgres:pass@db.xxx.supabase.co:5432/postgres`
+
 ### 4. Run Migrations
 ```bash
 npm run prisma:generate

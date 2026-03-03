@@ -55,7 +55,7 @@
 ### 1. Authentication System
 - ✅ User registration with email/password
 - ✅ Secure password hashing (bcrypt, 12 rounds)
-- ✅ JWT token generation (access + refresh)
+- ✅ JWT token generation (access token, refresh token returned but refresh endpoint not yet implemented)
 - ✅ Protected route middleware
 - ✅ Get current user endpoint
 
@@ -133,6 +133,8 @@ npm run dev
 - PDF generation with Puppeteer
 - Watermark management
 - Download tracking
+- Basic Zod validation for API inputs
+- Per-endpoint rate limiting for auth routes
 
 ### Step 3 - Payments & Premium Features
 - Razorpay integration
@@ -142,8 +144,6 @@ npm run dev
 
 ### Step 4 - Enhancements
 - Email notifications
-- Rate limiting
-- Input validation (Zod)
 - Analytics dashboard
 - Sharing links
 

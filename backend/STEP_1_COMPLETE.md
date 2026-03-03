@@ -123,7 +123,7 @@ curl http://localhost:3000/api/biodatas \
 ## 🔐 Security Features
 
 - ✅ Password hashing with bcrypt (12 rounds)
-- ✅ JWT authentication with access & refresh tokens
+- ✅ JWT authentication with access token
 - ✅ Protected routes
 - ✅ CORS configuration
 - ✅ Helmet.js security headers
@@ -132,8 +132,10 @@ curl http://localhost:3000/api/biodatas \
 ## 📝 API Endpoints Available
 
 ### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
+- `POST /api/auth/register` - Register new user (returns token + refreshToken)
+- `POST /api/auth/login` - Login user (returns token + refreshToken)
+- `POST /api/auth/refresh` - Refresh access token (planned)
+- `POST /api/auth/logout` - Logout user (planned)
 - `GET /api/auth/me` - Get current user (protected)
 
 ### Biodata Management

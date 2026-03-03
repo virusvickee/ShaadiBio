@@ -20,9 +20,14 @@ cp .env.example .env
 ```
 
 Required variables:
-- `DATABASE_URL`: PostgreSQL connection string
-- `JWT_SECRET`: Secret key for JWT tokens
-- `JWT_REFRESH_SECRET`: Secret key for refresh tokens
+- `DATABASE_URL`: PostgreSQL connection string (e.g., `postgresql://user:pass@localhost:5432/shaadibio`)
+- `JWT_SECRET`: High-entropy secret (≥256 bits/32 bytes). Generate with: `openssl rand -base64 32` or `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`. Store in secrets manager (AWS Secrets Manager, HashiCorp Vault) in production. Rotate periodically (90-day cycle) with token versioning/blacklist.
+- `JWT_REFRESH_SECRET`: High-entropy secret (≥256 bits/32 bytes). Generate same as JWT_SECRET. Never use predictable passphrases.
+- `PORT`: Server port (default: 3000)
+- `NODE_ENV`: Environment (development/production)
+- `FRONTEND_URL`: Frontend URL for CORS (e.g., `http://localhost:5173`)
+
+**Security Note:** Never commit secrets to source control. Use environment-specific configurations.
 
 ### 3. Setup Database
 
@@ -51,6 +56,10 @@ Server will start on `http://localhost:3000`
 
 ### Authentication
 
+#### Password Requirements
+- Minimum 8 characters
+- (Optional: Add uppercase, lowercase, number, special character requirements)
+
 #### Register
 ```http
 POST /api/auth/register
@@ -58,9 +67,26 @@ Content-Type: application/json
 
 {
   "email": "user@example.com",
-  "password": "password123",
+  "password": "SecurePass123!",
   "name": "John Doe",
   "phone": "+919876543210"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "uuid",
+      "email": "user@example.com",
+      "name": "John Doe",
+      "subscriptionTier": "FREE"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
 }
 ```
 
@@ -71,7 +97,61 @@ Content-Type: application/json
 
 {
   "email": "user@example.com",
-  "password": "password123"
+  "password": "SecurePass123!"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "uuid",
+      "email": "user@example.com",
+      "name": "John Doe",
+      "subscriptionTier": "FREE"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}
+```
+
+**Usage:** Take the `token` value from the response and use it in the `Authorization` header as `Bearer <token>` for subsequent requests.
+
+#### Refresh Token
+```http
+POST /api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}
+```
+
+#### Logout
+```http
+POST /api/auth/logout
+Authorization: Bearer <token>
+```
+
+Response:
+```json
+{
+  "success": true,
+  "message": "Logged out successfully"
 }
 ```
 
@@ -79,6 +159,19 @@ Content-Type: application/json
 ```http
 GET /api/auth/me
 Authorization: Bearer <token>
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "subscriptionTier": "FREE"
+  }
+}
 ```
 
 ### Biodata Management
@@ -173,11 +266,14 @@ npm start
 
 ## Next Steps
 
+### In Progress
+- [ ] **Rate limiting** - Using express-rate-limit middleware for auth and sensitive endpoints
+- [ ] **Input validation with Zod** - Request/response schemas for all public handlers
+- [ ] **Unit tests** - Jest/Vitest with target coverage ≥80%
+
+### Planned
 - [ ] Add file upload endpoints (S3/local storage)
 - [ ] Add PDF generation endpoints
 - [ ] Add payment integration (Razorpay)
 - [ ] Add email notifications
-- [ ] Add rate limiting
-- [ ] Add input validation with Zod
-- [ ] Add unit tests
 - [ ] Add API documentation (Swagger)

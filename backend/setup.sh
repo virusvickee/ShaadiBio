@@ -1,8 +1,18 @@
 #!/bin/bash
+set -euo pipefail
+
+# Trap errors and log them
+trap 'echo "❌ Error on line $LINENO. Command: $BASH_COMMAND"' ERR
 
 echo "🚀 ShaadiBio Backend Quick Start"
 echo "================================"
 echo ""
+
+# Check if .env.example exists
+if [ ! -f .env.example ]; then
+    echo "❌ Error: .env.example file not found"
+    exit 1
+fi
 
 # Check if .env exists
 if [ ! -f .env ]; then
@@ -15,15 +25,24 @@ fi
 
 # Install dependencies
 echo "📦 Installing dependencies..."
-npm install
+if ! npm install; then
+    echo "❌ Failed to install dependencies"
+    exit 1
+fi
 
 # Generate Prisma Client
 echo "🔧 Generating Prisma Client..."
-npm run prisma:generate
+if ! npm run prisma:generate; then
+    echo "❌ Failed to generate Prisma Client"
+    exit 1
+fi
 
 # Run migrations
 echo "🗄️  Running database migrations..."
-npm run prisma:migrate
+if ! npm run prisma:migrate; then
+    echo "❌ Failed to run database migrations"
+    exit 1
+fi
 
 echo ""
 echo "✅ Setup complete!"

@@ -3,7 +3,19 @@ import prisma from '../config/database';
 import { AppError } from '../middleware/error.middleware';
 import { generateToken, generateRefreshToken } from '../utils/jwt';
 
+const validatePassword = (password: string): void => {
+  if (!password || password.length < 8) {
+    throw new AppError('Password must be at least 8 characters long', 400);
+  }
+  // Optional: Add complexity requirements
+  // if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
+  //   throw new AppError('Password must contain uppercase, lowercase, and number', 400);
+  // }
+};
+
 export const register = async (email: string, password: string, name: string, phone?: string) => {
+  validatePassword(password);
+
   const existingUser = await prisma.user.findUnique({ where: { email } });
   
   if (existingUser) {
